@@ -20,10 +20,5 @@
 			header("Content-Type: application/json");
 			echo json_encode($retorno);
 		}
-
-		//ajusta os campos string para a query do banco
-		public static function ajustaCampoParaBD($campo){
-			return $campo == null ? "NULL" : "'".$campo."'";
-		}
 	}
 ?>

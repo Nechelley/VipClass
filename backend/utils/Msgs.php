@@ -1,4 +1,4 @@
-<?php
+<?php //<FAZER> verificar quais msgs estao REALMENTE sendo usadas
 	//Seta as strings das mensagens.
 	$msgErroConectarBanco = "Erro ao tentar conectar no banco de dados!";
 	$msgErroExecQuery = "Erro ao tentar executar a query!";

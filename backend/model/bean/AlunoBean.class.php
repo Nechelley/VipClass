@@ -1,18 +1,33 @@
 <?php
 	//Classe que representa a tabela Aluno
 	class AlunoBean{
-		private $id = null;
-		private $cpf = null;
-		private $nome = null;
-		private $sexo = null;
-		private $nivelAcesso = null;
-		private $email = null;
-		private $senha = null;
-		private $qtdTentativaLogin = null;
-		private $estaLogado = null;
-		private $dataPermissaoLogin = null;
-		private $flAtivo = null;
-		private $credito = null;
+		private $id;
+		private $cpf;
+		private $nome;
+		private $sexo;
+		private $nivelAcesso;
+		private $email;
+		private $senha;
+		private $qtdTentativaLogin;
+		private $estaLogado;
+		private $dataPermissaoLogin;
+		private $flAtivo;
+		private $credito;
+
+		public function __construct(){
+			$this->id = null;
+			$this->cpf = null;
+			$this->nome = null;
+			$this->sexo = null;
+			$this->nivelAcesso = null;
+			$this->email = null;
+			$this->senha = null;
+			$this->qtdTentativaLogin = null;
+			$this->estaLogado = null;
+			$this->dataPermissaoLogin = null;
+			$this->flAtivo = null;
+			$this->credito = null;
+		}
 
 		public function getId(){
 			return $this->id;

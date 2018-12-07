@@ -1,30 +1,36 @@
 <?php
-	//Classe que conecta com o banco
+	//Classe que conecta com o banco, usando PDO e padrao singleton
 	class Conexao{
-		private $server;
-		private $user;
-		private $password;
-		private $bd;
-		private $link;
+		private static $server;
+		private static $bd;
+		private static $user;
+		private static $password;
 
-		//Contrutor
-		public function Conexao($server = "127.0.0.1", $user = "root", $password = "", $bd = "mydb"){
-			$this->server = $server;
-			$this->user = $user;
-			$this->password = $password;
-			$this->bd = $bd;
-		}
+		private static $instance;
 
-		//Conecta com o banco, retorna false caso ocorra erro
-		public function conectar(){
-			$this->link = mysqli_connect($this->server, $this->user, $this->password, $this->bd);
+		private function __construct() { }
 
-			return $this->link;
+		public static function getConexao($server = "127.0.0.1", $bd = "mydb", $user = "root", $password = "") {
+			if (!isset(self::$instance)) {
+				self::$server = $server;
+				self::$bd = $bd;
+				self::$user = $user;
+				self::$password = $password;
+
+
+				self::$instance = new PDO("mysql:host=".self::$server.";dbname=".self::$bd, self::$user, self::$password);
+
+				self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);// para debug
+				// self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);// para quando jogar no servidor
+				self::$instance->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);// faz com que strings vazias se tornem NULL no banco
+			}
+
+			return self::$instance;
 		}
 
 		//Fecha conexao com o banco
-		public function fechar(){
-			mysqli_close($this->link);
+		public static function fechaConexao() {
+			self::$instance = null;
 		}
 	}
 ?>
