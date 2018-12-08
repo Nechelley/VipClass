@@ -1,14 +1,14 @@
 <?php //<FAZER> verificar quais msgs estao REALMENTE sendo usadas
 	//Seta as strings das mensagens.
-	$msgErroConectarBanco = "Erro ao tentar conectar no banco de dados!";
 	$msgErroExecQuery = "Erro ao tentar executar a query!";
 	$msgSemAcao = "Houve algum problema com a ação requerida!";
-	$msgErroAlunoIdInvalido = "Id inválido de aluno!";
-	$msgErroAlunoCpfInvalido = "Cpf inválido!";
-	$msgErroAlunoNomeInvalido = "Nome inválido!";
-	$msgErroAlunoSexoInvalido = "Sexo inválido!";
-	$msgErroAlunoEmailInvalido = "Email inválido!";
-	$msgErroAlunoSenhaInvalido = "Senha inválido!";
+
+	$msgErroIdInvalido = "Id inválido!";
+	$msgErroCpfInvalido = "Cpf inválido!";
+	$msgErroNomeInvalido = "Nome inválido!";
+	$msgErroSexoInvalido = "Sexo inválido!";
+	$msgErroEmailInvalido = "Email inválido!";
+	$msgErroSenhaInvalido = "Senha inválido!";
 
 
 

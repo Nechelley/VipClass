@@ -4,8 +4,8 @@
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
-	require_once("../model/bean/Alunobean.class.php");
-	require_once("../model/dao/AlunoDao.class.php");
+	require_once("../model/bean/Administradorbean.class.php");
+	require_once("../model/dao/AdministradorDao.class.php");
 
 	$entrada = Util::pegaInformacaoDoFront();
 
@@ -29,11 +29,11 @@
 
 				if($validador->getQntErros() == 0){//deu certo
 					//cria bean
-					$bean = new AlunoBean();
+					$bean = new AdministradorBean();
 					$bean->setId($entrada->id);
 
 					//busca
-					$retorno = AlunoDao::get($bean);
+					$retorno = AdministradorDao::get($bean);
 				}
 				else{
 					$retorno->setStatus(false);
@@ -42,14 +42,14 @@
 			}
 			else{
 				//busca
-				$retorno = AlunoDao::getTodos();
+				$retorno = AdministradorDao::getTodos();
 			}
 
 			Util::EnviaInformacaoParaFront($retorno);
 
 			break;
 		case "insert":
-			$bean = new AlunoBean();
+			$bean = new AdministradorBean();
 
 			$validador->setDado("cpf", (isset($entrada->cpf) ? $entrada->cpf : null));
 			$validador->setDado("nome", (isset($entrada->nome) ? $entrada->nome : null));
@@ -98,15 +98,15 @@
 					if($validador->getQntErros() == 0){//deu certo
 						$bean->setId($entrada->id);
 
-						$retorno = AlunoDao::update($bean);
+						$retorno = AdministradorDao::update($bean);
 					}
 					else{
 						$retorno->setStatus(false);
-						$retorno->setValor($GLOBALS["msgErroIdAlunoInvalido"]);
+						$retorno->setValor($GLOBALS["msgErroIdAdministradorInvalido"]);
 					}
 				}
 				else
-					$retorno = AlunoDao::insert($bean);
+					$retorno = AdministradorDao::insert($bean);
 			}
 			else{
 				$retorno->setStatus(false);
@@ -129,11 +129,11 @@
 
 				if($validador->getQntErros() == 0){//deu certo
 					//cria bean
-					$bean = new AlunoBean();
+					$bean = new AdministradorBean();
 					$bean->setId($entrada->id);
 
 					//deleta
-					$retorno = AlunoDao::delete($bean);
+					$retorno = AdministradorDao::delete($bean);
 				}
 				else{
 					$retorno->setStatus(false);
