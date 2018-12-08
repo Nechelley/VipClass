@@ -4,6 +4,7 @@
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
 	require_once("../model/bean/Administradorbean.class.php");
+	require_once("../model/bean/Professorbean.class.php");
 	require_once("../model/dao/AdministradorDao.class.php");
 
 	$entrada = Util::pegaInformacaoDoFront();
@@ -122,6 +123,40 @@
 
 				if($validador->getQntErros() == 0)//deu certo
 					$retorno = AdministradorDao::delete($bean);
+				else{
+					$retorno->setStatus(false);
+					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+				}
+			}
+			else{
+				$retorno->setStatus(false);
+				$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+			}
+
+			Util::EnviaInformacaoParaFront($retorno);
+
+			break;
+		case "aprovarProfessor":
+			if(isset($entrada->administradorId) && isset($entrada->professorId)){
+				//cria bean
+				$beanAdministrador = new AdministradorBean();
+				$beanProfessor = new AdministradorBean();
+
+				$beanAdministrador->setId(Util::limpaString($entrada->administradorId));
+				$beanProfessor->setId(Util::limpaString($entrada->professorId));
+
+				$validador->setDado("administradorId", $beanAdministrador->getId());
+				$validador->setDado("professorId", $beanProfessor->getId());
+
+				//validando
+				$validador->getDado("administradorId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("administradorId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				$validador->getDado("professorId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("professorId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				if($validador->getQntErros() == 0)//deu certo
+					$retorno = AdministradorDao::aprovarProfessor($beanAdministrador, $beanProfessor);
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);

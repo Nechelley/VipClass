@@ -92,7 +92,7 @@
 		}
 
 		//deleta professor
-		public static function delete($bean){//<FAZER> verificar se realmente remove o aluno um se so seta fl_ativo como false
+		public static function delete($bean){
 			$query = "
 				UPDATE Usuario SET
 					fl_ativo = 0

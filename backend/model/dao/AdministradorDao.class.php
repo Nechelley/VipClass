@@ -92,7 +92,7 @@
 		}
 
 		//deleta administrador
-		public static function delete($bean){//<FAZER> verificar se realmente remove o administrador um se so seta fl_ativo como false
+		public static function delete($bean){
 			$query = "
 				UPDATE Usuario SET
 					fl_ativo = 0
@@ -141,6 +141,24 @@
 
 			//executa
 			return ProcessaQuery::consultarQuery($query, $bindParams);
+		}
+
+		//aprova um professor
+		public static function aprovarProfessor($beanAdministrador, $beanProfessor){
+			$query = "
+				UPDATE Professor SET
+					Administrador_Usuario_id = :idAdministrador,
+					data_aprovacao_administrador = NOW()
+				WHERE Usuario_id = :idProfessor;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":idAdministrador", $beanAdministrador->getId(), PDO::PARAM_INT));
+			array_push($bindParams, new BindParam(":idProfessor", $beanProfessor->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
 		}
 	}
 ?>
