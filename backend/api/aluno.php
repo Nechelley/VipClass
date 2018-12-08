@@ -3,6 +3,7 @@
 	require_once("../utils/Msgs.php");
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
+	require_once("../utils/validador/Validador.class.php");
 	require_once("../model/bean/Alunobean.class.php");
 	require_once("../model/dao/AlunoDao.class.php");
 
@@ -11,12 +12,22 @@
 	$retorno = new Retorno();
 
 	$entrada->acao = Util::limpaString($entrada->acao);
+
+	$validador = new validador();
 	switch($entrada->acao){
 		case "get":
 			//verifica se e para buscar todos ou so um
 			if(isset($entrada->id)){
 				$entrada->id = Util::limpaString($entrada->id);
-				if($entrada->id != "" && $entrada->id >= 0){
+
+				//setando dados
+				$validador->setDado("id", intval($entrada->id));
+
+				//validando
+				$validador->getDado("id")->ehVazio($GLOBALS["msgErroAlunoIdInvalido"]);
+				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroAlunoIdInvalido"]);
+
+				if($validador->getQntErros() == 0){//deu certo
 					//cria bean
 					$bean = new AlunoBean();
 					$bean->setId($entrada->id);
@@ -40,63 +51,52 @@
 		case "insert":
 			$bean = new AlunoBean();
 
-			//validando campos
-			$erros = array();
+			$validador->setDado("cpf", (isset($entrada->cpf) ? $entrada->cpf : null));
+			$validador->setDado("nome", (isset($entrada->nome) ? $entrada->nome : null));
+			$validador->setDado("sexo", (isset($entrada->sexo) ? $entrada->sexo : null));
+			$validador->setDado("email", (isset($entrada->email) ? $entrada->email : null));
+			$validador->setDado("senha", (isset($entrada->senha) ? $entrada->senha : null));
 
-			if(isset($entrada->cpf)){
-				$entrada->cpf = Util::limpaString($entrada->cpf);
-				if(true) //<FAZER> fazer funcao que valida cpf
-					$bean->setCpf($entrada->cpf);
-				else
-					array_push($erros,$GLOBALS["msgErroAlunoCpfInvalido"]);
-			}
-			else
-				array_push($erros,$GLOBALS["msgErroAlunoCpfInvalido"]);
-			if(isset($entrada->nome)){
-				$entrada->nome = Util::limpaString($entrada->nome);
-				if(strlen($entrada->nome) > 0  && strlen($entrada->nome) <= 45)
-					$bean->setNome($entrada->nome);
-				else
-					array_push($erros,$GLOBALS["msgErroAlunoNomeInvalido"]);
-			}
-			else
-				array_push($erros,$GLOBALS["msgErroAlunoNomeInvalido"]);
-			if(isset($entrada->sexo)){
-				$entrada->sexo = Util::limpaString($entrada->sexo);
-				if($entrada->sexo == "M" || $entrada->sexo == "F")
-					$bean->setSexo($entrada->sexo);
-				else
-					array_push($erros,$GLOBALS["msgErroAlunoSexoInvalido"]);
-			}
-			else
-				array_push($erros,$GLOBALS["msgErroAlunoSexoInvalido"]);
-			if(isset($entrada->email)){
-				$entrada->email = Util::limpaString($entrada->email);
-				if(strlen($entrada->email) > 0  && strlen($entrada->email) <= 45 && true) //<FAZER> fazer funcao que valida email
-					$bean->setEmail($entrada->email);
-				else
-					array_push($erros,$GLOBALS["msgErroAlunoEmailInvalido"]);
-			}
-			else
-				array_push($erros,$GLOBALS["msgErroAlunoEmailInvalido"]);
-			if(isset($entrada->senha)){
-				$entrada->senha = Util::limpaString($entrada->senha);
-				if(strlen($entrada->senha) > 0  && strlen($entrada->senha) <= 45)
-					$bean->setSenha(password_hash($entrada->senha, PASSWORD_DEFAULT ));//ja salva o hash
-				else
-					array_push($erros,$GLOBALS["msgErroAlunoSenhaInvalido"]);
-			}
-			else
-				array_push($erros,$GLOBALS["msgErroAlunoSenhaInvalido"]);
+			$validador->getDado("cpf")->ehVazio($GLOBALS["msgErroAlunoCpfInvalido"]);
+			$validador->getDado("cpf")->ehCPF($GLOBALS["msgErroAlunoCpfInvalido"]);
 
-			if(empty($erros)){
+			$validador->getDado("nome")->ehVazio($GLOBALS["msgErroAlunoNomeInvalido"]);
+			$validador->getDado("nome")->temMinimo(1, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+			$validador->getDado("nome")->temMaximo(45, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+
+			$validador->getDado("sexo")->ehVazio($GLOBALS["msgErroAlunoSexoInvalido"]);
+			$validador->getDado("sexo")->ehStringPermitida(["M","F"], $GLOBALS["msgErroAlunoSexoInvalido"]);
+
+			$validador->getDado("email")->ehVazio($GLOBALS["msgErroAlunoEmailInvalido"]);
+			$validador->getDado("email")->temMinimo(1, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+			$validador->getDado("email")->temMaximo(45, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+			$validador->getDado("email")->ehEmail($GLOBALS["msgErroAlunoEmailInvalido"]);
+			//<FAZER> acrescentar verificacao se email ja esta cadastrado
+
+			$validador->getDado("senha")->ehVazio($GLOBALS["msgErroAlunoSenhaInvalido"]);
+			$validador->getDado("senha")->temMinimo(1, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+			$validador->getDado("senha")->temMaximo(45, true, $GLOBALS["msgErroAlunoNomeInvalido"]);
+
+			if($validador->getQntErros() == 0){//deu certo
+				$bean->setCpf($entrada->cpf);
+				$bean->setNome($entrada->nome);
+				$bean->setSexo($entrada->sexo);
+				$bean->setEmail($entrada->email);
+				$bean->setSenha(password_hash($entrada->senha, PASSWORD_DEFAULT));//ja salva o hash
+
 				//verifica se insere ou atualiza
 				if(isset($entrada->id)){
 					$entrada->id = Util::limpaString($entrada->id);
-					if($entrada->id != "" && $entrada->id >= 0){
-						$bean->setId($entrada->id);
 
-						//<FAZER>
+					//setando dados
+					$validador->setDado("id", $entrada->id);
+
+					//validando
+					$validador->getDado("id")->ehVazio($GLOBALS["msgErroAlunoIdInvalido"]);
+					$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroAlunoIdInvalido"]);
+
+					if($validador->getQntErros() == 0){//deu certo
+						$bean->setId($entrada->id);
 
 						$retorno = AlunoDao::update($bean);
 					}
@@ -110,26 +110,29 @@
 			}
 			else{
 				$retorno->setStatus(false);
-				$errosMsg = "";
-				foreach ($erros as $e) {
-					$errosMsg .= $e;
-				}
-				$retorno->setValor($errosMsg);
+				$retorno->setValor($validador->getTodosErrosMensagens());
 			}
 
 			Util::EnviaInformacaoParaFront($retorno);
 
 			break;
 		case "delete":
-			//verifica se e para buscar todos ou so um
 			if(isset($entrada->id)){
 				$entrada->id = Util::limpaString($entrada->id);
-				if($entrada->id != "" && $entrada->id >= 0){
+
+				//setando dados
+				$validador->setDado("id", $entrada->id);
+
+				//validando
+				$validador->getDado("id")->ehVazio($GLOBALS["msgErroAlunoIdInvalido"]);
+				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroAlunoIdInvalido"]);
+
+				if($validador->getQntErros() == 0){//deu certo
 					//cria bean
 					$bean = new AlunoBean();
 					$bean->setId($entrada->id);
 
-					//busca
+					//deleta
 					$retorno = AlunoDao::delete($bean);
 				}
 				else{
