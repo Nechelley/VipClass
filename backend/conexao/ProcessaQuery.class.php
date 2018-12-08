@@ -20,11 +20,11 @@
 					$retorno->setStatus(true);
 				else{
 					$retorno->setStatus(false);
-					$retorno->setValor($GLOBALS["$msgErroExecQuery"]);
+					$retorno->setValor($GLOBALS["msgErroExecQuery"]);
 				}
 			} catch (Exception $e) {
 				$retorno->setStatus(false);
-				$retorno->setValor($GLOBALS["$msgErroExecQuery"]);
+				$retorno->setValor($GLOBALS["msgErroExecQuery"]);
 				$retorno->setValor("Mensagem: ".$e->getMessage());// PARA DEBUG APENAS
 				// GeraLog::getInstance()->inserirLog("Erro: Código: " . $e->getCode() . " Mensagem: " . $e->getMessage());//<FAZER> esquema de log semelhante, parece uma boa ideia
 			} finally {
@@ -53,11 +53,11 @@
 					$retorno->setValor($objs);
 				} else{
 					$retorno->setStatus(false);
-					$retorno->setValor($GLOBALS["$msgErroExecQuery"]);
+					$retorno->setValor($GLOBALS["msgErroExecQuery"]);
 				}
 			} catch (Exception $e) {
 				$retorno->setStatus(false);
-				$retorno->setValor($GLOBALS["$msgErroExecQuery"]);
+				$retorno->setValor($GLOBALS["msgErroExecQuery"]);
 				$retorno->setValor("Mensagem: ".$e->getMessage());// PARA DEBUG APENAS
 				// GeraLog::getInstance()->inserirLog("Erro: Código: " . $e->getCode() . " Mensagem: " . $e->getMessage());//<FAZER> esquema de log semelhante, parece uma boa ideia
 			} finally {

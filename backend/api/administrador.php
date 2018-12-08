@@ -1,5 +1,4 @@
 <?php
-	//<FAZER> verificacao se email e cpf ja estao cadastrados
 	require_once("../utils/Msgs.php");
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
@@ -17,48 +16,51 @@
 	switch($entrada->acao){
 		case "get":
 			//verifica se e para buscar todos ou so um
-			if(isset($entrada->id)){
-				$entrada->id = Util::limpaString($entrada->id);
+			if(isset($entrada->id)){//busca um
+				//cria bean
+				$bean = new AdministradorBean();
+				$bean->setId(Util::limpaString($entrada->id));
 
 				//setando dados
-				$validador->setDado("id", intval($entrada->id));
+				$validador->setDado("id", $bean->getId());
 
 				//validando
 				$validador->getDado("id")->ehVazio($GLOBALS["msgErroIdInvalido"]);
 				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
-				if($validador->getQntErros() == 0){//deu certo
-					//cria bean
-					$bean = new AdministradorBean();
-					$bean->setId($entrada->id);
-
-					//busca
+				if($validador->getQntErros() == 0)//deu certo
 					$retorno = AdministradorDao::get($bean);
-				}
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 				}
 			}
-			else{
-				//busca
+			else//busca todos
 				$retorno = AdministradorDao::getTodos();
-			}
 
 			Util::EnviaInformacaoParaFront($retorno);
 
 			break;
 		case "insert":
+			//setando bean
 			$bean = new AdministradorBean();
+			$bean->setId(isset($entrada->id) ? Util::limpaString($entrada->id) : null);
+			$bean->setCpf(isset($entrada->cpf) ? Util::limpaString($entrada->cpf) : null);
+			$bean->setNome(isset($entrada->nome) ? Util::limpaString($entrada->nome) : null);
+			$bean->setSexo(isset($entrada->sexo) ? Util::limpaString($entrada->sexo) : null);
+			$bean->setEmail(isset($entrada->email) ? Util::limpaString($entrada->email) : null);
+			$bean->setSenha(isset($entrada->senha) ? Util::limpaString($entrada->senha) : null);
 
-			$validador->setDado("cpf", (isset($entrada->cpf) ? $entrada->cpf : null));
-			$validador->setDado("nome", (isset($entrada->nome) ? $entrada->nome : null));
-			$validador->setDado("sexo", (isset($entrada->sexo) ? $entrada->sexo : null));
-			$validador->setDado("email", (isset($entrada->email) ? $entrada->email : null));
-			$validador->setDado("senha", (isset($entrada->senha) ? $entrada->senha : null));
+			//setando dados no validador
+			$validador->setDado("cpf", $bean->getCpf());
+			$validador->setDado("nome", $bean->getNome());
+			$validador->setDado("sexo", $bean->getSexo());
+			$validador->setDado("email", $bean->getEmail());
+			$validador->setDado("senha", $bean->getSenha());
 
 			$validador->getDado("cpf")->ehVazio($GLOBALS["msgErroCpfInvalido"]);
 			$validador->getDado("cpf")->ehCPF($GLOBALS["msgErroCpfInvalido"]);
+			$validador->getDado("cpf")->jaCadastrado(AdministradorDao::getPorCpf($bean), "cpf", (isset($entrada->id) ? AdministradorDao::get($bean) : null), $GLOBALS["msgErroCpfInvalido"]);
 
 			$validador->getDado("nome")->ehVazio($GLOBALS["msgErroNomeInvalido"]);
 			$validador->getDado("nome")->temMinimo(1, true, $GLOBALS["msgErroNomeInvalido"]);
@@ -68,44 +70,34 @@
 			$validador->getDado("sexo")->ehStringPermitida(["M","F"], $GLOBALS["msgErroSexoInvalido"]);
 
 			$validador->getDado("email")->ehVazio($GLOBALS["msgErroEmailInvalido"]);
-			$validador->getDado("email")->temMinimo(1, true, $GLOBALS["msgErroNomeInvalido"]);
-			$validador->getDado("email")->temMaximo(45, true, $GLOBALS["msgErroNomeInvalido"]);
+			$validador->getDado("email")->temMinimo(1, true, $GLOBALS["msgErroEmailInvalido"]);
+			$validador->getDado("email")->temMaximo(45, true, $GLOBALS["msgErroEmailInvalido"]);
 			$validador->getDado("email")->ehEmail($GLOBALS["msgErroEmailInvalido"]);
-			//<FAZER> acrescentar verificacao se email ja esta cadastrado
+			$validador->getDado("email")->jaCadastrado(AdministradorDao::getPorEmail($bean), "email", (isset($entrada->id) ? AdministradorDao::get($bean) : null), $GLOBALS["msgErroEmailInvalido"]);
 
 			$validador->getDado("senha")->ehVazio($GLOBALS["msgErroSenhaInvalido"]);
-			$validador->getDado("senha")->temMinimo(1, true, $GLOBALS["msgErroNomeInvalido"]);
-			$validador->getDado("senha")->temMaximo(45, true, $GLOBALS["msgErroNomeInvalido"]);
+			$validador->getDado("senha")->temMinimo(1, true, $GLOBALS["msgErroSenhaInvalido"]);
+			$validador->getDado("senha")->temMaximo(45, true, $GLOBALS["msgErroSenhaInvalido"]);
 
 			if($validador->getQntErros() == 0){//deu certo
-				$bean->setCpf($entrada->cpf);
-				$bean->setNome($entrada->nome);
-				$bean->setSexo($entrada->sexo);
-				$bean->setEmail($entrada->email);
-				$bean->setSenha(password_hash($entrada->senha, PASSWORD_DEFAULT));//ja salva o hash
+				$bean->setSenha(password_hash($bean->getSenha(), PASSWORD_DEFAULT));//ja salva o hash
 
 				//verifica se insere ou atualiza
-				if(isset($entrada->id)){
-					$entrada->id = Util::limpaString($entrada->id);
-
-					//setando dados
-					$validador->setDado("id", $entrada->id);
+				if(isset($entrada->id)){//atualiza
+					$validador->setDado("id", $bean->getId());
 
 					//validando
 					$validador->getDado("id")->ehVazio($GLOBALS["msgErroIdInvalido"]);
 					$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
-					if($validador->getQntErros() == 0){//deu certo
-						$bean->setId($entrada->id);
-
+					if($validador->getQntErros() == 0)//deu certo
 						$retorno = AdministradorDao::update($bean);
-					}
 					else{
 						$retorno->setStatus(false);
 						$retorno->setValor($GLOBALS["msgErroIdAdministradorInvalido"]);
 					}
 				}
-				else
+				else//insere novo
 					$retorno = AdministradorDao::insert($bean);
 			}
 			else{
@@ -118,23 +110,18 @@
 			break;
 		case "delete":
 			if(isset($entrada->id)){
-				$entrada->id = Util::limpaString($entrada->id);
+				//cria bean
+				$bean = new AdministradorBean();
+				$bean->setId(Util::limpaString($entrada->id));
 
-				//setando dados
-				$validador->setDado("id", $entrada->id);
+				$validador->setDado("id", $bean->getId());
 
 				//validando
 				$validador->getDado("id")->ehVazio($GLOBALS["msgErroIdInvalido"]);
 				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
-				if($validador->getQntErros() == 0){//deu certo
-					//cria bean
-					$bean = new AdministradorBean();
-					$bean->setId($entrada->id);
-
-					//deleta
+				if($validador->getQntErros() == 0)//deu certo
 					$retorno = AdministradorDao::delete($bean);
-				}
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);

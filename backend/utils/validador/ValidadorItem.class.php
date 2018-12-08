@@ -57,8 +57,9 @@
 			if($this->listaComMsgsErro == null)
 				return $msgTodosErros;
 			foreach($this->listaComMsgsErro as $msgErro)
-				if(isset($msgTodosErros))
-					$msgTodosErros .= $separador.$msgErro;
+				print_r($msgErro);
+				if(isset($msgTodosErros)){
+					$msgTodosErros .= $separador.$msgErro;}
 				else
 					$msgTodosErros .= $msgErro;
 			return $msgTodosErros;
@@ -227,6 +228,33 @@
 					$this->listaComMsgsErro[$codigoDeErro] = $mensagem;
 				$this->listaComBoolDeErro[$codigoDeErro] = TRUE;
 			}
+			return $this;
+		}
+
+		//Verifica se dado
+		public function jaCadastrado($retornoComItens, $atributo, $valorAntigo, $mensagem = null , $codigoDeErro = Validador::ErroStringPermitida){
+			if($valorAntigo == null)
+				return $this;
+
+			foreach ($retornoComItens->getValor() as $obj) {
+				if($atributo == "cpf"){
+					if($obj->cpf == $this->itemValor && (($valorAntigo->getValor())[0])->cpf != $this->itemValor){
+						if($mensagem != null)
+							$this->listaComMsgsErro[$codigoDeErro] = $mensagem;
+						$this->listaComBoolDeErro[$codigoDeErro] = TRUE;
+						break;
+					}
+				}
+				else if($atributo == "email"){
+					if($obj->email == $this->itemValor && (($valorAntigo->getValor())[0])->email != $this->itemValor){
+						if($mensagem != null)
+							$this->listaComMsgsErro[$codigoDeErro] = $mensagem;
+						$this->listaComBoolDeErro[$codigoDeErro] = TRUE;
+						break;
+					}
+				}
+			}
+
 			return $this;
 		}
 

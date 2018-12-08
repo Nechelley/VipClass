@@ -19,6 +19,7 @@
 		const ErroEmail = 6;
 		const ErroData = 7;
 		const ErroStringPermitida = 8;
+		const ErroDadoJaCadastrado = 9;
 
 		public function __construct(){
 			$this->listaValoresCampo = array();

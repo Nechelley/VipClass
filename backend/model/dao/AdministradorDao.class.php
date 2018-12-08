@@ -107,6 +107,40 @@
 			return ProcessaQuery::executarQuery($query, $bindParams);
 		}
 
+		//retorna administradores com o cpf informado
+		public static function getPorCpf($bean){
+			$query = "
+				SELECT
+					cpf
+				FROM Usuario
+				WHERE cpf = :cpf
+				AND fl_ativo = 1;
+			";
 
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":cpf", $bean->getCpf(), PDO::PARAM_STR));
+
+			//executa
+			return ProcessaQuery::consultarQuery($query, $bindParams);
+		}
+
+		//retorna administradores com o email informado
+		public static function getPorEmail($bean){
+			$query = "
+				SELECT
+					email
+				FROM Usuario
+				WHERE email LIKE :email
+				AND fl_ativo = 1;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":email", $bean->getEmail(), PDO::PARAM_STR));
+
+			//executa
+			return ProcessaQuery::consultarQuery($query, $bindParams);
+		}
 	}
 ?>
