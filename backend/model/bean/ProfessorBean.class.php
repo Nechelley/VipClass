@@ -28,7 +28,8 @@
 			$this->estaLogado = null;
 			$this->dataPermissaoLogin = null;
 			$this->flAtivo = null;
-			$this->credito = null;
+			$this->administradorQueAprovou = null;
+			$this->dataQueAprovou = null;
 		}
 
 		public function getId(){
@@ -118,7 +119,7 @@
 		public function setFlAtivo($valor){
 			$this->flAtivo = $valor;
 		}
-		
+
 		public function getAdministradorQueAprovou(){
 			return $this->administradorQueAprovou;
 		}

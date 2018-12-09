@@ -8,7 +8,9 @@
 	$msgErroNomeInvalido = "Nome inválido!";
 	$msgErroSexoInvalido = "Sexo inválido!";
 	$msgErroEmailInvalido = "Email inválido!";
-	$msgErroSenhaInvalido = "Senha inválido!";
+	$msgErroSenhaInvalido = "Senha inválida!";
+	$msgErroValorInvalido = "Valor inválido!";
+	$msgErroDescricaoInvalido = "Descrição inválida!";
 
 
 
