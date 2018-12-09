@@ -160,5 +160,21 @@
 			//executa
 			return ProcessaQuery::executarQuery($query, $bindParams);
 		}
+
+		//aprova um curso
+		public static function aprovarCurso($beanCurso){
+			$query = "
+				UPDATE Curso SET
+					aprovado_pelo_administrador = 1
+				WHERE id = :id;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":id", $beanCurso->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
+		}
 	}
 ?>

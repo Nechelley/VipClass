@@ -3,8 +3,9 @@
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
-	require_once("../model/bean/Administradorbean.class.php");
-	require_once("../model/bean/Professorbean.class.php");
+	require_once("../model/bean/AdministradorBean.class.php");
+	require_once("../model/bean/ProfessorBean.class.php");
+	require_once("../model/bean/CursoBean.class.php");
 	require_once("../model/dao/AdministradorDao.class.php");
 
 	$entrada = Util::pegaInformacaoDoFront();
@@ -140,7 +141,7 @@
 			if(isset($entrada->administradorId) && isset($entrada->professorId)){
 				//cria bean
 				$beanAdministrador = new AdministradorBean();
-				$beanProfessor = new AdministradorBean();
+				$beanProfessor = new ProfessorBean();
 
 				$beanAdministrador->setId(Util::limpaString($entrada->administradorId));
 				$beanProfessor->setId(Util::limpaString($entrada->professorId));
@@ -157,6 +158,34 @@
 
 				if($validador->getQntErros() == 0)//deu certo
 					$retorno = AdministradorDao::aprovarProfessor($beanAdministrador, $beanProfessor);
+				else{
+					$retorno->setStatus(false);
+					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+				}
+			}
+			else{
+				$retorno->setStatus(false);
+				$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+			}
+
+			Util::EnviaInformacaoParaFront($retorno);
+
+			break;
+		case "aprovarCurso":
+			if(isset($entrada->cursoId)){
+				//cria bean
+				$beanCurso = new CursoBean();
+
+				$beanCurso->setId(Util::limpaString($entrada->cursoId));
+
+				$validador->setDado("cursoId", $beanCurso->getId());
+
+				//validando
+				$validador->getDado("cursoId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("cursoId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				if($validador->getQntErros() == 0)//deu certo
+					$retorno = AdministradorDao::aprovarCurso($beanCurso);
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
