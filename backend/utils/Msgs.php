@@ -15,6 +15,8 @@
 	$msgErroLinkVideoAulaInvalido = "Link da video aula inválido!";
 	$msgErroMensagemInvalido = "Mensagem inválida!";
 	$msgErroDataEnvioInvalido = "Data envio inválida!";
+	$msgErroDataCompraInvalido = "Data compra inválida!";
+	$msgErroValorCompraInvalido = "Valor compra inválido!";
 
 
 
