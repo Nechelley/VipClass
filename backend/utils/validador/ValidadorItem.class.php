@@ -200,8 +200,8 @@
 		public function ehData($mensagem = null , $codigoDeErro = Validador::ErroData){
 			$data = $this->itemValor;
 			$dataHoraSplit = explode(" ",$data);
-			$dataSplit = explode("-",$dataHoraSplit);
-			$horaSplit = explode(":",$dataHoraSplit);
+			$dataSplit = explode("-",$dataHoraSplit[0]);
+			$horaSplit = explode(":",$dataHoraSplit[1]);
 
 			if(!is_numeric($dataSplit[0]) || !is_numeric($dataSplit[1]) || !is_numeric($dataSplit[2]) || !is_numeric($horaSplit[0])  || !is_numeric($horaSplit[1]) || !is_numeric($horaSplit[2]) || !checkdate($dataSplit[1], $dataSplit[2], $dataSplit[0]) || ($horaSplit[0] < 0 || $horaSplit[0] > 23) || ($horaSplit[1] < 0 || $horaSplit[1] > 59) || ($horaSplit[2] < 0 || $horaSplit[2] > 59)){
 				if($mensagem != null)

@@ -13,6 +13,8 @@
 	$msgErroDescricaoInvalido = "Descrição inválida!";
 	$msgErroTextoInvalido = "Texto inválido!";
 	$msgErroLinkVideoAulaInvalido = "Link da video aula inválido!";
+	$msgErroMensagemInvalido = "Mensagem inválida!";
+	$msgErroDataEnvioInvalido = "Data envio inválida!";
 
 
 
