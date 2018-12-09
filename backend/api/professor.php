@@ -94,7 +94,7 @@
 						$retorno = ProfessorDao::update($bean);
 					else{
 						$retorno->setStatus(false);
-						$retorno->setValor($GLOBALS["msgErroIdProfessorInvalido"]);
+						$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 					}
 				}
 				else//insere novo

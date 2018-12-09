@@ -96,7 +96,7 @@
 						$retorno = AdministradorDao::update($bean);
 					else{
 						$retorno->setStatus(false);
-						$retorno->setValor($GLOBALS["msgErroIdAdministradorInvalido"]);
+						$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 					}
 				}
 				else//insere novo

@@ -3,8 +3,8 @@
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
-	require_once("../model/bean/Alunobean.class.php");
-	require_once("../model/dao/AlunoDao.class.php");
+	require_once("../model/bean/Aulabean.class.php");
+	require_once("../model/dao/AulaDao.class.php");
 
 	$entrada = Util::pegaInformacaoDoFront();
 
@@ -18,7 +18,7 @@
 			//verifica se e para buscar todos ou so um
 			if(isset($entrada->id)){//busca um
 				//cria bean
-				$bean = new AlunoBean();
+				$bean = new AulaBean();
 				$bean->setId(Util::limpaString($entrada->id));
 
 				//setando dados
@@ -29,59 +29,65 @@
 				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
 				if($validador->getQntErros() == 0)//deu certo
-					$retorno = AlunoDao::get($bean);
+					$retorno = AulaDao::get($bean);
+				else{
+					$retorno->setStatus(false);
+					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+				}
+			}
+			else if(isset($entrada->cursoId)){
+				//cria bean
+				$bean = new AulaBean();
+				$bean->setCursoId(Util::limpaString($entrada->cursoId));
+
+				//setando dados
+				$validador->setDado("cursoId", $bean->getCursoId());
+
+				//validando
+				$validador->getDado("cursoId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("cursoId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				if($validador->getQntErros() == 0)//deu certo
+					$retorno = AulaDao::getTodosPorCurso($bean);
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 				}
 			}
 			else//busca todos
-				$retorno = AlunoDao::getTodos();
+				$retorno = AulaDao::getTodos();
 
 			Util::EnviaInformacaoParaFront($retorno);
 
 			break;
 		case "insert":
 			//setando bean
-			$bean = new AlunoBean();
+			$bean = new AulaBean();
 			$bean->setId(isset($entrada->id) ? Util::limpaString($entrada->id) : null);
-			$bean->setCpf(isset($entrada->cpf) ? Util::limpaString($entrada->cpf) : null);
 			$bean->setNome(isset($entrada->nome) ? Util::limpaString($entrada->nome) : null);
-			$bean->setSexo(isset($entrada->sexo) ? Util::limpaString($entrada->sexo) : null);
-			$bean->setEmail(isset($entrada->email) ? Util::limpaString($entrada->email) : null);
-			$bean->setSenha(isset($entrada->senha) ? Util::limpaString($entrada->senha) : null);
+			$bean->setTexto(isset($entrada->texto) ? Util::limpaString($entrada->texto) : null);
+			$bean->setLinkVideoAula(isset($entrada->linkVideoAula) ? Util::limpaString($entrada->linkVideoAula) : null);
+			$bean->setCursoId(isset($entrada->cursoId) ? Util::limpaString($entrada->cursoId) : null);
 
 			//setando dados no validador
-			$validador->setDado("cpf", $bean->getCpf());
 			$validador->setDado("nome", $bean->getNome());
-			$validador->setDado("sexo", $bean->getSexo());
-			$validador->setDado("email", $bean->getEmail());
-			$validador->setDado("senha", $bean->getSenha());
-
-			$validador->getDado("cpf")->ehVazio($GLOBALS["msgErroCpfInvalido"]);
-			$validador->getDado("cpf")->ehCPF($GLOBALS["msgErroCpfInvalido"]);
-			$validador->getDado("cpf")->jaCadastrado(AlunoDao::getPorCpf($bean), "cpf", (isset($entrada->id) ? AlunoDao::get($bean) : null), $GLOBALS["msgErroCpfInvalido"]);
+			$validador->setDado("texto", $bean->getTexto());
+			$validador->setDado("linkVideoAula", $bean->getLinkVideoAula());
+			$validador->setDado("cursoId", $bean->getCursoId());
 
 			$validador->getDado("nome")->ehVazio($GLOBALS["msgErroNomeInvalido"]);
 			$validador->getDado("nome")->temMinimo(1, true, $GLOBALS["msgErroNomeInvalido"]);
 			$validador->getDado("nome")->temMaximo(45, true, $GLOBALS["msgErroNomeInvalido"]);
 
-			$validador->getDado("sexo")->ehVazio($GLOBALS["msgErroSexoInvalido"]);
-			$validador->getDado("sexo")->ehStringPermitida(["M","F"], $GLOBALS["msgErroSexoInvalido"]);
+			$validador->getDado("texto")->ehVazio($GLOBALS["msgErroTextoInvalido"]);
 
-			$validador->getDado("email")->ehVazio($GLOBALS["msgErroEmailInvalido"]);
-			$validador->getDado("email")->temMinimo(1, true, $GLOBALS["msgErroEmailInvalido"]);
-			$validador->getDado("email")->temMaximo(45, true, $GLOBALS["msgErroEmailInvalido"]);
-			$validador->getDado("email")->ehEmail($GLOBALS["msgErroEmailInvalido"]);
-			$validador->getDado("email")->jaCadastrado(AlunoDao::getPorEmail($bean), "email", (isset($entrada->id) ? AlunoDao::get($bean) : null), $GLOBALS["msgErroEmailInvalido"]);
+			$validador->getDado("linkVideoAula")->temMinimo(1, true, $GLOBALS["msgErroLinkVideoAulaInvalido"]);
+			$validador->getDado("linkVideoAula")->temMaximo(200, true, $GLOBALS["msgErroLinkVideoAulaInvalido"]);
 
-			$validador->getDado("senha")->ehVazio($GLOBALS["msgErroSenhaInvalido"]);
-			$validador->getDado("senha")->temMinimo(1, true, $GLOBALS["msgErroSenhaInvalido"]);
-			$validador->getDado("senha")->temMaximo(45, true, $GLOBALS["msgErroSenhaInvalido"]);
+			$validador->getDado("cursoId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+			$validador->getDado("cursoId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
 			if($validador->getQntErros() == 0){//deu certo
-				$bean->setSenha(password_hash($bean->getSenha(), PASSWORD_DEFAULT));//ja salva o hash
-
 				//verifica se insere ou atualiza
 				if(isset($entrada->id)){//atualiza
 					$validador->setDado("id", $bean->getId());
@@ -91,14 +97,14 @@
 					$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
 					if($validador->getQntErros() == 0)//deu certo
-						$retorno = AlunoDao::update($bean);
+						$retorno = AulaDao::update($bean);
 					else{
 						$retorno->setStatus(false);
 						$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 					}
 				}
 				else//insere novo
-					$retorno = AlunoDao::insert($bean);
+					$retorno = AulaDao::insert($bean);
 			}
 			else{
 				$retorno->setStatus(false);
@@ -111,7 +117,7 @@
 		case "delete":
 			if(isset($entrada->id)){
 				//cria bean
-				$bean = new AlunoBean();
+				$bean = new AulaBean();
 				$bean->setId(Util::limpaString($entrada->id));
 
 				$validador->setDado("id", $bean->getId());
@@ -121,7 +127,7 @@
 				$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
 				if($validador->getQntErros() == 0)//deu certo
-					$retorno = AlunoDao::delete($bean);
+					$retorno = AulaDao::delete($bean);
 				else{
 					$retorno->setStatus(false);
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);

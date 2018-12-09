@@ -101,6 +101,8 @@
 
 		//Verifica se o dado passado tem quantidade de caracteres acima do limite passado como parametro ou se o numero ultrapassa o valor
 		public function temMaximo($limiteMaximo , $ehString = false, $mensagem = null , $codigoDeErro = Validador::ErroMaximo){
+			if($this->get() == null)
+				return $this;
 			if(is_int($limiteMaximo)){
 				if($ehString){//string
 					if(strlen($this->itemValor) >= $limiteMaximo){
@@ -124,7 +126,8 @@
 
 		//Verifica se o dado passado tem quantidade de caracteres abaixo do limite passado como parametro ou se o numero esta abaixo do limite
 		public function temMinimo($limiteMinimo , $ehString = false, $mensagem = null , $codigoDeErro = Validador::ErroMinimo){
-
+			if($this->get() == null)
+				return $this;
 			if(is_numeric($limiteMinimo)){
 				if($ehString){//string
 					if(strlen($this->itemValor) <= $limiteMinimo){

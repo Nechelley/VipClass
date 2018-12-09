@@ -82,7 +82,7 @@
 						$retorno = CursoDao::update($bean);
 					else{
 						$retorno->setStatus(false);
-						$retorno->setValor($GLOBALS["msgErroIdCursoInvalido"]);
+						$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 					}
 				}
 				else//insere novo
