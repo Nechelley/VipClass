@@ -20,10 +20,14 @@
 		}
 
 		//Retorna o administrador pelo id
-		public static function get($bean){//<FAZER> verificar quais campos realmente precisam ser buscados
+		public static function get($bean){
 			$query = "
 				SELECT
-					*
+					id,
+					cpf,
+					email,
+					nome,
+					sexo
 				FROM Usuario
 				INNER JOIN Administrador ON Administrador.Usuario_id = Usuario.id
 				WHERE Usuario.id = :id
@@ -175,6 +179,25 @@
 
 			//executa
 			return ProcessaQuery::executarQuery($query, $bindParams);
+		}
+
+		//Retorna o administrador pelo id
+		public static function getSenha($bean){
+			$query = "
+				SELECT
+					senha
+				FROM Usuario
+				INNER JOIN Administrador ON Administrador.Usuario_id = Usuario.id
+				WHERE Usuario.id = :id
+				AND Usuario.fl_ativo = 1;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":id", $bean->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::consultarQuery($query, $bindParams);
 		}
 	}
 ?>

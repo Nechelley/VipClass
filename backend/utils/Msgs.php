@@ -17,6 +17,7 @@
 	$msgErroDataEnvioInvalido = "Data envio inválida!";
 	$msgErroDataCompraInvalido = "Data compra inválida!";
 	$msgErroValorCompraInvalido = "Valor compra inválido!";
+	$msgErroSenhaAntigaInvalido = "Senha antiga inválida!";
 
 
 
