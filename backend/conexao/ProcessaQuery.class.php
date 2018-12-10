@@ -3,7 +3,7 @@
 	require_once("BindParam.class.php");
 	require_once("../utils/Retorno.class.php");
 
-	//Classe que processa as querys
+	//Classe que processa as querys 
 	class ProcessaQuery{//<FAZER> implementar parte de transacao
 		//Conecta com o banco e executa a query passada, serve para inserts, updates e deletes
 		public static function executarQuery($query, $bindParams = array()){

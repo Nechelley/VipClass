@@ -5,7 +5,7 @@
 		public static function limpaString($string) {
 			return $string;
 		}
-
+ 
 		//retorna oque veio como entrada na requisicao
 		public static function pegaInformacaoDoFront(){
 			header("Access-Control-Allow-Origin: *");

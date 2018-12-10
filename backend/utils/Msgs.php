@@ -18,10 +18,7 @@
 	$msgErroDataCompraInvalido = "Data compra inválida!";
 	$msgErroValorCompraInvalido = "Valor compra inválido!";
 
-
-
-
-	/*$msgErroLogin = "Não existe usuario com este login e senha!";
-	$msgErroImgTipo = "Imagem não possui uma extensão válida!";
+	$msgErroLogin = "Não existe usuário com este login e/ou senha!";
+	/*$msgErroImgTipo = "Imagem não possui uma extensão válida!";
 	$msgErroImgTamanho = "Imagem muito grande!";*/
 ?>
