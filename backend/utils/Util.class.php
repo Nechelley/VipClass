@@ -9,7 +9,7 @@
 		//retorna oque veio como entrada na requisicao
 		public static function pegaInformacaoDoFront(){
 			header("Access-Control-Allow-Origin: *");
-			header("Access-Control-Allow-Headers: Content-Type");
+			header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 			$json = file_get_contents("php://input");
 			return json_decode($json);

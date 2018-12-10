@@ -23,6 +23,7 @@ export class UsuarioService {
 	getUsuario(): any {
 
 		this.usuario.perfil = JSON.parse(localStorage.getItem(userStore)).roles[0].authority;
+		this.usuario.id = JSON.parse(localStorage.getItem(userStore)).id;
 
 		return this.usuario;
 

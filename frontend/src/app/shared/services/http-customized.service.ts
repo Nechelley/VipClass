@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, empty, throwError } from 'rxjs';
 import { AlertService } from './alert.service';
 import { messages } from '../../app.constants';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 @Injectable({
@@ -86,7 +86,15 @@ export class HttpCustomizedService {
 
 			}
 
-		);
+		).pipe(map((response) => {
+
+			if(typeof response === 'string') {
+
+				return JSON.parse(response);
+
+			}
+
+		}));
 
 	}
 
