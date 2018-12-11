@@ -21,7 +21,7 @@ export class AprovacaoService {
 			naoAprovados: true
 		}
 
-		return this.http.postWithCustomConfig(api.PROFESSOR, data, 'application/json', 'text');
+		return this.http.postWithTextResponse(api.PROFESSOR, data);
 
 	}
 
@@ -39,13 +39,13 @@ export class AprovacaoService {
 			professorId: professor.id
 		}
 
-		return this.http.postWithCustomConfig(api.ADMINISTRADOR,'application/json', 'text');
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, data);
 
 	}
 
 	aprovarCurso(curso: any) {
 
-		return this.http.postWithCustomConfig(api.ADMINISTRADOR,'application/json', 'text');
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, curso);
 
 	}
 

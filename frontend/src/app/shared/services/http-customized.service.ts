@@ -86,7 +86,13 @@ export class HttpCustomizedService {
 
 			}
 
-		).pipe(map((response) => {
+		);
+
+	}
+
+	postWithTextResponse(url: string, data: any) {
+
+		return this.postWithCustomConfig(url, data, 'application/json', 'text').pipe(map((response) => {
 
 			if(typeof response === 'string') {
 
