@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../shared/services/usuario.service';
+import { CadastroService } from '../cadastro/cadastro.service';
 
 @Component({
 	selector: 'app-perfil',
@@ -11,13 +12,15 @@ export class PerfilComponent implements OnInit {
 	private editing: boolean = false;
 	private usuario: any;
 
-	constructor(private usuarioService: UsuarioService) {
+	constructor(private usuarioService: UsuarioService, private cadastroService: CadastroService) {
 
 		this.usuario = this.usuarioService.getUsuario();
 
 	}
 
 	ngOnInit() {
+
+		this.getUsuarioAdministradorTeste();
 	}
 
 	isEditing(): boolean {
@@ -29,6 +32,12 @@ export class PerfilComponent implements OnInit {
 	setIsEditing(editing: boolean) {
 
 		this.editing = editing;
+
+	}
+
+	getUsuarioAdministradorTeste() {
+
+		this.cadastroService.findAdministrador().subscribe((response) => console.log(response));
 
 	}
 

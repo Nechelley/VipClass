@@ -29,12 +29,15 @@ export const messages = {
 	loginSucesso: 'Login efetuado com sucesso!'
 };
 
+export const BASE_API = 'http://localhost:8000/';
+
 export const api = {
 	// TODO inserir as urls aqui do backend
 	FIND_USUARIO: 'URL',
 	FIND_USUARIO_AUTHENTICADO: 'URL',
 	LOGIN: 'URL',
-	LOGOUT: 'URL'
+	LOGOUT: 'URL',
+	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php'
 };
 
 export const Erro: any = {
@@ -63,4 +66,11 @@ export const routePieces = {
 	},
 	perfil: 'perfil'
 
+}
+
+export const ACAO = {
+	INSERT_UPDATE: 'insert',
+	UPDATE: 'update',
+	GET: 'get',
+	DELETE: 'delete'
 }
