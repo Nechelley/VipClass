@@ -31,10 +31,22 @@ export class AprovacaoService {
 
 	}
 
-	aprovarProfessor(professor: any): Observable<any> {
+	aprovarProfessor(aprovar: boolean, professor: any): Observable<any> {
+
+		let acao;
+
+		if(aprovar) {
+
+			acao = ACAO.APROVAR_PROFESSOR;
+
+		} else {
+
+			acao = ACAO.REPROVAR_PROFESSOR
+
+		}
 
 		const data = {
-			acao: ACAO.APROVAR_PROFESSOR,
+			acao: acao,
 			administradorId: this.usuarioService.getUsuario().id,
 			professorId: professor.id
 		}
@@ -43,7 +55,24 @@ export class AprovacaoService {
 
 	}
 
-	aprovarCurso(curso: any) {
+	aprovarCurso(aprovar: boolean, curso: any) {
+
+		let acao;
+
+		if(aprovar) {
+
+			acao = ACAO.APROVAR_CURSO;
+
+		} else {
+
+			acao = ACAO.REPROVAR_CURSO
+
+		}
+
+		const data = {
+			acao: acao,
+			cursoId: curso.id
+		}
 
 		return this.http.postWithTextResponse(api.ADMINISTRADOR, curso);
 

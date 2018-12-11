@@ -99,13 +99,17 @@ export class AprovacaoComponent implements OnInit {
 
 	aprovarProfessor(aprovar: boolean, professor: any) {
 
-		this.aprovacaoService.aprovarProfessor(professor).subscribe(
+		this.aprovacaoService.aprovarProfessor(aprovar, professor).subscribe(
 			(response) => {
 
 				if(response.status) {
 
 					this.alertService.showAlert('Professor aprovado com sucesso', 'success');
 					this.findProfessoresNaoAprovados();
+
+				} else {
+
+					this.alertService.showAlert('Erro ao aprovar professor', 'error');
 
 				}
 

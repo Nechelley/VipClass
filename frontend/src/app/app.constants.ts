@@ -77,5 +77,7 @@ export const ACAO = {
 	GET: 'get',
 	DELETE: 'delete',
 	APROVAR_PROFESSOR: 'aprovarProfessor',
-	APROVAR_CURSO: 'aprovarCurso'
+	REPROVAR_PROFESSOR: 'desaprovarProfessor',
+	APROVAR_CURSO: 'aprovarCurso',
+	REPROVAR_CURSO: 'desaprovarCurso'
 }
