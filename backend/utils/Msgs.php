@@ -2,6 +2,7 @@
 	//Seta as strings das mensagens.
 	$msgErroExecQuery = "Erro ao tentar executar a query!";
 	$msgSemAcao = "Houve algum problema com a ação requerida!";
+	$msgErroInternoServidor = "Ocorreu um erro inesperado!";
 
 	$msgErroIdInvalido = "Id inválido!";
 	$msgErroCpfInvalido = "Cpf inválido!";
@@ -18,7 +19,9 @@
 	$msgErroDataCompraInvalido = "Data compra inválida!";
 	$msgErroValorCompraInvalido = "Valor compra inválido!";
 
-	$msgErroLogin = "Não existe usuário com este login e/ou senha!";
+	$msgErroLogin = "Email e/ou senha inválidos!";
+	$msgErroUsuarioLogado = "O usuário está logado em outra sessão!";
+	$msgErroTentativasLogin = "As tentativas de login atigiram o limite, por favor, tente mais tarde.";
 	/*$msgErroImgTipo = "Imagem não possui uma extensão válida!";
 	$msgErroImgTamanho = "Imagem muito grande!";*/
 ?>

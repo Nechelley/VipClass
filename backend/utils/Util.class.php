@@ -20,5 +20,22 @@
 			header("Content-Type: application/json");
 			echo json_encode($retorno);
 		}
+
+		public static function isDataValida($data)
+		{
+			if (!isset($data) || is_null($data)){
+				return false;
+			}
+
+			$dataAtual = (new DateTime())->getTimestamp();
+			$data = (new DateTime($data))->getTimestamp();
+
+			if ($data > $dataAtual) {
+				return false;
+			}
+
+			return true;
+		}
+
 	}
 ?>

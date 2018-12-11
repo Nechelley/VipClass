@@ -3,8 +3,9 @@
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
-	require_once("../model/bean/Alunobean.class.php");
+	require_once("../model/bean/AlunoBean.class.php");
 	require_once("../model/dao/AlunoDao.class.php");
+
 
 	$entrada = Util::pegaInformacaoDoFront();
 

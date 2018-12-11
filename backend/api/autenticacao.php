@@ -2,6 +2,7 @@
 include_once("../utils/Msgs.php");
 include_once("../utils/Retorno.class.php");
 include_once("../utils/Util.class.php");
+include_once("../utils/NivelAcesso.class.php");
 include_once("../utils/validador/Validador.class.php");
 include_once("../model/bean/LoginBean.class.php");
 include_once("../model/dao/AutenticacaoDao.class.php");
@@ -49,6 +50,14 @@ try {
 			$loginBean = new LoginBean($email, $senha);
 
 			$retorno = AutenticacaoDao::verificarLogin($loginBean);
+			
+			break;
+		case 'logout':
+			break;
+		case 'usuarioLogado':
+			
+			break;
+		case 'usuarioPodeLogar':
 			break;
 		default :
 			$retorno->setValor($GLOBALS['msgSemAcao']);
