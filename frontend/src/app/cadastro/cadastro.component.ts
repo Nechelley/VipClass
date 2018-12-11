@@ -61,18 +61,24 @@ export class CadastroComponent implements OnInit {
 			if(params.tipo === routeParams.tipo.admin) {
 
 				this.isAdmin = true;
+				this.isProfessor = false;
+				this.isAluno = false;
 
 			}
 
 			if(params.tipo === routeParams.tipo.professor) {
 
 				this.isProfessor = true;
+				this.isAdmin = false;
+				this.isAluno = false;
 
 			}
 
 			if(params.tipo === routeParams.tipo.aluno) {
 
 				this.isAluno = true;
+				this.isAdmin = false;
+				this.isProfessor = false;
 
 			}
 
