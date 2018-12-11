@@ -19,6 +19,22 @@ export class CadastroService {
 
 	}
 
+	cadastrarProfessor(professor: any): Observable<any> {
+
+		professor.acao = ACAO.INSERT_UPDATE;
+
+		return this.http.postWithCustomConfig(api.PROFESSOR, professor, 'application/json', 'text');
+
+	}
+
+	cadastrarAluno(aluno: any): Observable<any> {
+
+		aluno.acao = ACAO.INSERT_UPDATE;
+
+		return this.http.postWithCustomConfig(api.ALUNO, aluno, 'application/json', 'text');
+
+	}
+
 	findAdministrador(): Observable<any> {
 
 		const user = this.usuarioService.getUsuario();

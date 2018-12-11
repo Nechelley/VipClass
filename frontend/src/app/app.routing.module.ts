@@ -21,6 +21,7 @@ import { PerfilAdminGuard } from './shared/security/guards/perfilAdmin.guard';
 
 const appRoutes: Routes = [
 	{ path: 'cadastro/:tipo', component: CadastroComponent, canActivate: [LoginGuard] },
+	{ path: 'cadastro/:tipo/kkkbl23aindnfejpoiae11nmova23sdjofwflllaa26', component: CadastroComponent, canActivate: [LoginGuard] },
 	{ path: 'home', component: ListagemCursoComponent, canActivate: [AuthGuard] }, // TODO ALTERAR
 	{ path: 'login', component: LoginComponent, canActivate: [LoginGuard]},
 	{ path: 'perfil', component: PerfilComponent, canActivate: [AuthGuard] },

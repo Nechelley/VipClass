@@ -38,7 +38,8 @@ export const api = {
 	LOGIN: 'URL',
 	LOGOUT: 'URL',
 	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php',
-	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php'
+	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php',
+	ALUNO: BASE_API + 'VipClass/backend/api/aluno.php'
 };
 
 export const Erro: any = {
@@ -50,7 +51,8 @@ export const routePieces = {
 	home: 'home',
 	cadastro: {
 		aluno: 'cadastro/aluno',
-		professor: 'cadastro/professor'
+		professor: 'cadastro/professor',
+		admin: 'cadastro/admin/kkkbl23aindnfejpoiae11nmova23sdjofwflllaa26'
 	},
 	email: 'email',
 	login: 'login',
