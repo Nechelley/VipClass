@@ -20,7 +20,7 @@ export class LoginService {
 
 		// });
 
-		// return this.httpCustomizedService.postWithCustomConfig(api.LOGIN, parameters, 'application/x-www-form-urlencoded', 'text');
+		// return this.httpCustomizedService.postWithTextResponse(api.LOGIN, parameters, 'application/x-www-form-urlencoded', 'text');
 
 		localStorage.setItem(headersNames.Authorization, 'tokenTeste');
 		// localStorage.setItem(userStore, credentials);

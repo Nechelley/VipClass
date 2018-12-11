@@ -15,7 +15,23 @@ export class CadastroService {
 
 		admin.acao = ACAO.INSERT_UPDATE;
 
-		return this.http.postWithCustomConfig(api.ADMINISTRADOR, admin, 'application/json', 'text');
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, admin);
+
+	}
+
+	cadastrarProfessor(professor: any): Observable<any> {
+
+		professor.acao = ACAO.INSERT_UPDATE;
+
+		return this.http.postWithTextResponse(api.PROFESSOR, professor);
+
+	}
+
+	cadastrarAluno(aluno: any): Observable<any> {
+
+		aluno.acao = ACAO.INSERT_UPDATE;
+
+		return this.http.postWithTextResponse(api.ALUNO, aluno);
 
 	}
 
@@ -24,14 +40,14 @@ export class CadastroService {
 		const user = this.usuarioService.getUsuario();
 		user.acao = ACAO.GET;
 
-		return this.http.postWithCustomConfig(api.ADMINISTRADOR, user, 'application/json', 'text');
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, user);
 
 	}
 
 	updateAdministrador(admin: any): Observable<any> {
 
 		admin.acao = ACAO.INSERT_UPDATE;
-		return this.http.postWithCustomConfig(api.ADMINISTRADOR, admin, 'application/json', 'text');
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, admin);
 
 	}
 }

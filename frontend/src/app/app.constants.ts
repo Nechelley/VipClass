@@ -37,7 +37,9 @@ export const api = {
 	FIND_USUARIO_AUTHENTICADO: 'URL',
 	LOGIN: 'URL',
 	LOGOUT: 'URL',
-	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php'
+	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php',
+	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php',
+	ALUNO: BASE_API + 'VipClass/backend/api/aluno.php'
 };
 
 export const Erro: any = {
@@ -49,7 +51,8 @@ export const routePieces = {
 	home: 'home',
 	cadastro: {
 		aluno: 'cadastro/aluno',
-		professor: 'cadastro/professor'
+		professor: 'cadastro/professor',
+		admin: 'cadastro/admin/kkkbl23aindnfejpoiae11nmova23sdjofwflllaa26'
 	},
 	email: 'email',
 	login: 'login',
@@ -72,5 +75,9 @@ export const ACAO = {
 	INSERT_UPDATE: 'insert',
 	UPDATE: 'update',
 	GET: 'get',
-	DELETE: 'delete'
+	DELETE: 'delete',
+	APROVAR_PROFESSOR: 'aprovarProfessor',
+	REPROVAR_PROFESSOR: 'desaprovarProfessor',
+	APROVAR_CURSO: 'aprovarCurso',
+	REPROVAR_CURSO: 'desaprovarCurso'
 }

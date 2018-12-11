@@ -46,7 +46,7 @@
 		public static function insert($bean){//<FAZER> verificar quais campos realmente precisam ser inseridos e quais sao padroes
 			$query = "
 				INSERT INTO Usuario(cpf, nome, sexo, nivel_acesso, email, senha, qtd_tentativa_login, esta_logado, data_permissao_login, fl_ativo)
-				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 0, TRUE, NOW(), 1);
+				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 0, FALSE, NOW(), 1);
 
 				INSERT INTO Administrador(Usuario_id)
 				VALUES(LAST_INSERT_ID());
@@ -192,6 +192,43 @@
 
 			//executa
 			return ProcessaQuery::consultarQuery($query, $bindParams);
+		}
+
+		//aprova um professor
+		public static function desaprovarProfessor($beanAdministrador, $beanProfessor){
+			$query = "
+				UPDATE Professor SET
+					Administrador_Usuario_id = :idAdministrador
+				WHERE Usuario_id = :idProfessor;
+
+				UPDATE Usuario SET
+					fl_ativo = 0
+				WHERE id = :idProfessor;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":idAdministrador", $beanAdministrador->getId(), PDO::PARAM_INT));
+			array_push($bindParams, new BindParam(":idProfessor", $beanProfessor->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
+		}
+
+		//aprova um curso
+		public static function desaprovarCurso($beanCurso){
+			$query = "
+				UPDATE Curso SET
+					aprovado_pelo_administrador = 0
+				WHERE id = :id;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":id", $beanCurso->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
 		}
 	}
 ?>
