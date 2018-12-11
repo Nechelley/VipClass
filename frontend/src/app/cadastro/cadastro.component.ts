@@ -3,8 +3,10 @@ import { NavegacaoService } from '../shared/services/navegacao.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { CadastroService } from './cadastro.service';
-import { sexo } from '../app.constants';
+import { sexo, routeParams, routePieces } from '../app.constants';
 import { AlertService } from '../shared/services/alert.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
 	selector: 'app-cadastro',
@@ -15,13 +17,23 @@ export class CadastroComponent implements OnInit {
 
 	formulario: FormGroup;
 	sexo: any = sexo;
+	subscriptions: Subscription[] = [];
+
+	isAdmin = false;
+	isProfessor = false;
+	isAluno = false;
 
 	constructor(
 		private redirectService: NavegacaoService,
 		private formBuilder: FormBuilder,
 		private cadastroService: CadastroService,
-		private alertService: AlertService
-	) { }
+		private alertService: AlertService,
+		private activatedRoute: ActivatedRoute
+	) {
+
+		this.listenToRoute();
+
+	}
 
 	ngOnInit() {
 
@@ -42,6 +54,31 @@ export class CadastroComponent implements OnInit {
 
 	}
 
+	listenToRoute() {
+
+		this.subscriptions.push(this.activatedRoute.params.subscribe((params: Params) => {
+
+			if(params.tipo === routeParams.tipo.admin) {
+
+				this.isAdmin = true;
+
+			}
+
+			if(params.tipo === routeParams.tipo.professor) {
+
+				this.isProfessor = true;
+
+			}
+
+			if(params.tipo === routeParams.tipo.aluno) {
+
+				this.isAluno = true;
+
+			}
+
+		}));
+	}
+
 	goToLogin() {
 
 		this.redirectService.redirectToLogin();
@@ -50,7 +87,7 @@ export class CadastroComponent implements OnInit {
 
 	goToCadastroProfessor() {
 
-		// TODO redirecionar para o cadastro de professor
+		this.redirectService.goTo(routePieces.cadastro.professor);
 
 	}
 
@@ -62,7 +99,7 @@ export class CadastroComponent implements OnInit {
 
 	}
 
-	cadastrarUsuario() {
+	cadastrarAdministrador() {
 
 		this.cadastroService.cadastrarAdministrador(this.formulario.value).subscribe(
 			(response) => {
@@ -70,6 +107,7 @@ export class CadastroComponent implements OnInit {
 				if(response.status) {
 
 					this.alertService.showAlert('Administrador cadastrado com sucesso!','success');
+					this.redirectService.redirectToLogin();
 
 				} else {
 
@@ -79,6 +117,66 @@ export class CadastroComponent implements OnInit {
 
 			}
 		);
+
+	}
+
+	cadastrarProfessor() {
+
+		this.cadastroService.cadastrarProfessor(this.formulario.value).subscribe(
+			(response) => {
+
+				if(response.status) {
+
+					this.alertService.showAlert('Professor cadastrado com sucesso!','success');
+					this.redirectService.redirectToLogin();
+
+				} else {
+
+					this.alertService.showAlert('Erro ao cadastrar Professor!','error');
+
+				}
+
+			}
+		);
+
+	}
+
+	cadastrarAluno() {
+
+		this.cadastroService.cadastrarAluno(this.formulario.value).subscribe(
+			(response) => {
+
+				if(response.status) {
+
+					this.alertService.showAlert('Aluno cadastrado com sucesso!','success');
+					this.redirectService.redirectToLogin();
+
+				} else {
+
+					this.alertService.showAlert('Erro ao cadastrar aluno!','error');
+
+				}
+
+			}
+		);
+
+	}
+
+	cadastrarUsuario() {
+
+		if(this.isAdmin) {
+
+			this.cadastrarAdministrador();
+
+		} else if(this.isAluno) {
+
+			this.cadastrarAluno();
+
+		} else if(this.isProfessor) {
+
+			this.cadastrarProfessor();
+
+		}
 
 	}
 
