@@ -27,4 +27,11 @@ export class CadastroService {
 		return this.http.postWithCustomConfig(api.ADMINISTRADOR, user, 'application/json', 'text');
 
 	}
+
+	updateAdministrador(admin: any): Observable<any> {
+
+		admin.acao = ACAO.INSERT_UPDATE;
+		return this.http.postWithCustomConfig(api.ADMINISTRADOR, admin, 'application/json', 'text');
+
+	}
 }

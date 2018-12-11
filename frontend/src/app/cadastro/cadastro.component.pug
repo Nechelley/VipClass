@@ -19,12 +19,14 @@ form.account-block.padding-padrao([formGroup]='formulario', (ngSubmit)='cadastra
 	.form-group
 		label Senha: *
 		input.form-control#senha(type="password", [ngClass]="senhasConferem() ? 'border-green' : ''",
-			formControlName='senha', placeholder="A senha deve conter no mínimo 10 caracteres"
+			formControlName='senha', placeholder="A senha deve conter no mínimo 10 caracteres",
+			maxlength=45
 		)
 	.form-group
 		label Redigite a senha: *
 		input.form-control#redigiteSenha(type="password", [ngClass]="senhasConferem() ? 'border-green' : ''",
-			formControlName='senhaRedigitada', placeholder="A senha deve conter no mínimo 10 caracteres"
+			formControlName='senhaRedigitada', placeholder="A senha deve conter no mínimo 10 caracteres",
+			maxlength=45
 		)
 	//- TODO recaptcha
 	.form-group
