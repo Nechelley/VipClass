@@ -198,9 +198,12 @@
 		public static function desaprovarProfessor($beanAdministrador, $beanProfessor){
 			$query = "
 				UPDATE Professor SET
-					Administrador_Usuario_id = :idAdministrador,
-					fl_ativo = 0
+					Administrador_Usuario_id = :idAdministrador
 				WHERE Usuario_id = :idProfessor;
+
+				UPDATE Usuario SET
+					fl_ativo = 0
+				WHERE id = :idProfessor;
 			";
 
 			//parametros de bind
