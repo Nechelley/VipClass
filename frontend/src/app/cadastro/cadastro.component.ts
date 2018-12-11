@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavegacaoService } from '../shared/services/navegacao.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
+import { CadastroService } from './cadastro.service';
+import { sexo } from '../app.constants';
+import { AlertService } from '../shared/services/alert.service';
 
 @Component({
 	selector: 'app-cadastro',
@@ -11,8 +14,14 @@ import * as _ from 'lodash';
 export class CadastroComponent implements OnInit {
 
 	formulario: FormGroup;
+	sexo: any = sexo;
 
-	constructor(private redirectService: NavegacaoService, private formBuilder: FormBuilder) { }
+	constructor(
+		private redirectService: NavegacaoService,
+		private formBuilder: FormBuilder,
+		private cadastroService: CadastroService,
+		private alertService: AlertService
+	) { }
 
 	ngOnInit() {
 
@@ -23,12 +32,12 @@ export class CadastroComponent implements OnInit {
 	loadForm() {
 
 		this.formulario = this.formBuilder.group({
-			nome: [null, Validators.required],
+			nome: [null, [Validators.required, Validators.maxLength(45)]],
 			cpf: [null, Validators.required],
 			sexo: [null, Validators.required],
 			email: [null, Validators.required],
-			senha: [null, [Validators.required, Validators.minLength(15)]],
-			senhaRedigitada: [null, [Validators.required, Validators.minLength(15)]],
+			senha: [null, [Validators.required, Validators.minLength(10)]],
+			senhaRedigitada: [null, [Validators.required, Validators.minLength(10)]],
 		});
 
 	}
@@ -55,7 +64,21 @@ export class CadastroComponent implements OnInit {
 
 	cadastrarUsuario() {
 
-		// TODO cadastrar usuario no back
+		this.cadastroService.cadastrarAdministrador(this.formulario.value).subscribe(
+			(response) => {
+
+				if(response.status) {
+
+					this.alertService.showAlert('Administrador cadastrado com sucesso!','success');
+
+				} else {
+
+					this.alertService.showAlert('Erro ao cadastrar administrador!','error');
+
+				}
+
+			}
+		);
 
 	}
 

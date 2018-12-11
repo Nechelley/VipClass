@@ -87,5 +87,17 @@
 			//executa
 			return ProcessaQuery::executarQuery($query, $bindParams);
 		}
+
+		//Retorna todos os cursos
+		public static function getTodosNaoAprovados(){//<FAZER> verificar quais campos realmente precisam ser buscados e verificar se precisa retornar as infs do professor dono do curso
+			$query = "
+				SELECT
+					*
+				FROM Curso
+				WHERE aprovado_pelo_administrador = 0;
+			";
+
+			return ProcessaQuery::consultarQuery($query);
+		}
 	}
 ?>

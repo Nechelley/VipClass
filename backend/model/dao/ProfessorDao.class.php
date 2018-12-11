@@ -42,7 +42,7 @@
 		public static function insert($bean){//<FAZER> verificar quais campos realmente precisam ser inseridos e quais sao padroes
 			$query = "
 				INSERT INTO Usuario(cpf, nome, sexo, nivel_acesso, email, senha, qtd_tentativa_login, esta_logado, data_permissao_login, fl_ativo)
-				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 0, TRUE, NOW(), 1);
+				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 1, TRUE, NOW(), 1);
 
 				INSERT INTO Professor(Usuario_id, Administrador_Usuario_id, data_aprovacao_administrador)
 				VALUES(LAST_INSERT_ID(), NULL, NULL);
@@ -68,10 +68,7 @@
 					nome = :nome,
 					sexo = :sexo,
 					email = :email,
-					senha = :senha,
-					qtd_tentativa_login = :qtd_tentativa_login,
-					esta_logado = :esta_logado,
-					data_permissao_login = :data_permissao_login
+					senha = :senha
 				WHERE id = :id;
 			";
 
@@ -82,9 +79,6 @@
 			array_push($bindParams, new BindParam(":sexo", $bean->getSexo(), PDO::PARAM_STR));
 			array_push($bindParams, new BindParam(":email", $bean->getEmail(), PDO::PARAM_STR));
 			array_push($bindParams, new BindParam(":senha", $bean->getSenha(), PDO::PARAM_STR));
-			array_push($bindParams, new BindParam(":qtd_tentativa_login", $bean->getQtdTentativaLogin(), PDO::PARAM_INT));
-			array_push($bindParams, new BindParam(":esta_logado", $bean->getEstaLogado(), PDO::PARAM_BOOL));
-			array_push($bindParams, new BindParam(":data_permissao_login", $bean->getDataPermissaoLogin(), PDO::PARAM_STR));
 			array_push($bindParams, new BindParam(":id", $bean->getId(), PDO::PARAM_INT));
 
 			//executa
@@ -141,6 +135,20 @@
 
 			//executa
 			return ProcessaQuery::consultarQuery($query, $bindParams);
+		}
+
+		//Retorna todos os professores
+		public static function getTodosNaoAprovados(){//<FAZER> verificar quais campos realmente precisam ser buscados
+			$query = "
+				SELECT
+					*
+				FROM Usuario
+				INNER JOIN Professor ON Professor.Usuario_id = Usuario.id
+				WHERE Usuario.fl_ativo = 1
+				AND Administrador_Usuario_id IS NULL;
+			";
+
+			return ProcessaQuery::consultarQuery($query);
 		}
 	}
 ?>

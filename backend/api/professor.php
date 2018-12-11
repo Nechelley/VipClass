@@ -35,6 +35,8 @@
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 				}
 			}
+			else if(isset($entrada->naoAprovados))
+				$retorno = ProfessorDao::getTodosNaoAprovados();
 			else//busca todos
 				$retorno = ProfessorDao::getTodos();
 
@@ -84,17 +86,23 @@
 
 				//verifica se insere ou atualiza
 				if(isset($entrada->id)){//atualiza
-					$validador->setDado("id", $bean->getId());
+					if(sha1(Util::limpaString($entrada->senhaAntiga)) == (ProfessorDao::getSenha($bean)->valor[0])->senha){
+						$validador->setDado("id", $bean->getId());
 
-					//validando
-					$validador->getDado("id")->ehVazio($GLOBALS["msgErroIdInvalido"]);
-					$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+						//validando
+						$validador->getDado("id")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+						$validador->getDado("id")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
 
-					if($validador->getQntErros() == 0)//deu certo
-						$retorno = ProfessorDao::update($bean);
+						if($validador->getQntErros() == 0)//deu certo
+							$retorno = ProfessorDao::update($bean);
+						else{
+							$retorno->setStatus(false);
+							$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+						}
+					}
 					else{
 						$retorno->setStatus(false);
-						$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+						$retorno->setValor($GLOBALS["msgErroSenhaAntigaInvalido"]);
 					}
 				}
 				else//insere novo

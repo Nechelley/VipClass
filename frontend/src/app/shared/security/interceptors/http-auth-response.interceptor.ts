@@ -38,6 +38,7 @@ export class HttpAuthResponseInterceptor implements HttpInterceptor {
 					this.setToken(error);
 					this.errorHandler(error);
 
+					// TODO alterar para trhow aqui
 					return Observable.throw(error);
 
 				}));
