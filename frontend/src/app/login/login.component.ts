@@ -57,9 +57,6 @@ export class LoginComponent implements OnInit {
 
 		this.loginService.login(user).subscribe(
 			(response) => {
-				alert(JSON.stringify(response));
-
-				console.log(response);
 
 				this.authService.auth(user);
 				this.redirectService.goTo(routePieces.home);
