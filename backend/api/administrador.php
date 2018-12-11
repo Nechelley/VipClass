@@ -205,6 +205,68 @@
 			Util::EnviaInformacaoParaFront($retorno);
 
 			break;
+		case "desaprovarProfessor":
+			if(isset($entrada->administradorId) && isset($entrada->professorId)){
+				//cria bean
+				$beanAdministrador = new AdministradorBean();
+				$beanProfessor = new ProfessorBean();
+
+				$beanAdministrador->setId(Util::limpaString($entrada->administradorId));
+				$beanProfessor->setId(Util::limpaString($entrada->professorId));
+
+				$validador->setDado("administradorId", $beanAdministrador->getId());
+				$validador->setDado("professorId", $beanProfessor->getId());
+
+				//validando
+				$validador->getDado("administradorId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("administradorId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				$validador->getDado("professorId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("professorId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				if($validador->getQntErros() == 0)//deu certo
+					$retorno = AdministradorDao::desaprovarProfessor($beanAdministrador, $beanProfessor);
+				else{
+					$retorno->setStatus(false);
+					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+				}
+			}
+			else{
+				$retorno->setStatus(false);
+				$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+			}
+
+			Util::EnviaInformacaoParaFront($retorno);
+
+			break;
+		case "desaprovarCurso":
+			if(isset($entrada->cursoId)){
+				//cria bean
+				$beanCurso = new CursoBean();
+
+				$beanCurso->setId(Util::limpaString($entrada->cursoId));
+
+				$validador->setDado("cursoId", $beanCurso->getId());
+
+				//validando
+				$validador->getDado("cursoId")->ehVazio($GLOBALS["msgErroIdInvalido"]);
+				$validador->getDado("cursoId")->temMinimo(1, $GLOBALS["msgErroIdInvalido"]);
+
+				if($validador->getQntErros() == 0)//deu certo
+					$retorno = AdministradorDao::desaprovarCurso($beanCurso);
+				else{
+					$retorno->setStatus(false);
+					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+				}
+			}
+			else{
+				$retorno->setStatus(false);
+				$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
+			}
+
+			Util::EnviaInformacaoParaFront($retorno);
+
+			break;
 		default:
 			$retorno->setStatus(false);
 			$retorno->setValor($GLOBALS["msgSemAcao"]);

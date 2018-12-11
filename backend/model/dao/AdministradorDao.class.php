@@ -193,5 +193,39 @@
 			//executa
 			return ProcessaQuery::consultarQuery($query, $bindParams);
 		}
+
+		//aprova um professor
+		public static function desaprovarProfessor($beanAdministrador, $beanProfessor){
+			$query = "
+				UPDATE Professor SET
+					Administrador_Usuario_id = :idAdministrador,
+					fl_ativo = 0
+				WHERE Usuario_id = :idProfessor;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":idAdministrador", $beanAdministrador->getId(), PDO::PARAM_INT));
+			array_push($bindParams, new BindParam(":idProfessor", $beanProfessor->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
+		}
+
+		//aprova um curso
+		public static function desaprovarCurso($beanCurso){
+			$query = "
+				UPDATE Curso SET
+					aprovado_pelo_administrador = 0
+				WHERE id = :id;
+			";
+
+			//parametros de bind
+			$bindParams = array();
+			array_push($bindParams, new BindParam(":id", $beanCurso->getId(), PDO::PARAM_INT));
+
+			//executa
+			return ProcessaQuery::executarQuery($query, $bindParams);
+		}
 	}
 ?>
