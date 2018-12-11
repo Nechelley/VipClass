@@ -35,6 +35,8 @@
 					$retorno->setValor($GLOBALS["msgErroIdInvalido"]);
 				}
 			}
+			else if(isset($entrada->naoAprovados))
+				$retorno = ProfessorDao::getTodosNaoAprovados();
 			else//busca todos
 				$retorno = ProfessorDao::getTodos();
 

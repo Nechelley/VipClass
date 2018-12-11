@@ -136,5 +136,19 @@
 			//executa
 			return ProcessaQuery::consultarQuery($query, $bindParams);
 		}
+
+		//Retorna todos os professores
+		public static function getTodosNaoAprovados(){//<FAZER> verificar quais campos realmente precisam ser buscados
+			$query = "
+				SELECT
+					*
+				FROM Usuario
+				INNER JOIN Professor ON Professor.Usuario_id = Usuario.id
+				WHERE Usuario.fl_ativo = 1
+				AND Administrador_Usuario_id IS NULL;
+			";
+
+			return ProcessaQuery::consultarQuery($query);
+		}
 	}
 ?>
