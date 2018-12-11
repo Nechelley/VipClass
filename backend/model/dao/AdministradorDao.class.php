@@ -46,7 +46,7 @@
 		public static function insert($bean){//<FAZER> verificar quais campos realmente precisam ser inseridos e quais sao padroes
 			$query = "
 				INSERT INTO Usuario(cpf, nome, sexo, nivel_acesso, email, senha, qtd_tentativa_login, esta_logado, data_permissao_login, fl_ativo)
-				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 0, TRUE, NOW(), 1);
+				VALUES(:cpf, :nome, :sexo, 0, :email, :senha, 0, FALSE, NOW(), 1);
 
 				INSERT INTO Administrador(Usuario_id)
 				VALUES(LAST_INSERT_ID());
