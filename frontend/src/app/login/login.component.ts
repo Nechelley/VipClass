@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
 
 				this.authService.auth(user);
 				this.redirectService.goTo(routePieces.home);
-				this.alertService.showAlert(messages.loginSucesso, 'success');
 
 			}
 		);

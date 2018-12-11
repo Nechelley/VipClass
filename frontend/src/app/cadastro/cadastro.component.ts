@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavegacaoService } from '../shared/services/navegacao.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import { CadastroService } from './cadastro.service';
+import { CadastroService } from '../shared/services/cadastro.service';
 import { sexo, routeParams, routePieces } from '../app.constants';
 import { AlertService } from '../shared/services/alert.service';
 import { Subscription } from 'rxjs';

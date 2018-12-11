@@ -3,7 +3,7 @@
 	require_once("../utils/Retorno.class.php");
 	require_once("../utils/Util.class.php");
 	require_once("../utils/validador/Validador.class.php");
-	require_once("../model/bean/Cursobean.class.php");
+	require_once("../model/bean/CursoBean.class.php");
 	require_once("../model/dao/CursoDao.class.php");
 
 	$entrada = Util::pegaInformacaoDoFront();

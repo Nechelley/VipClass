@@ -86,8 +86,17 @@ export class AprovacaoComponent implements OnInit {
 
 	findCursosNaoAprovados() {
 
-		// TODO chamar back para buscar a lista de cursos não aprovados
+		this.aprovacaoService.findCursosNaoAprovados().subscribe(
+			(response) => {
 
+				if(response.status) {
+
+					this.cursosNaoAprovados = response.valor;
+
+				}
+
+			}
+		);
 
 	}
 
@@ -104,12 +113,12 @@ export class AprovacaoComponent implements OnInit {
 
 				if(response.status) {
 
-					this.alertService.showAlert('Professor aprovado com sucesso', 'success');
+					this.alertService.showAlert('Ação feita com sucesso', 'success');
 					this.findProfessoresNaoAprovados();
 
 				} else {
 
-					this.alertService.showAlert('Erro ao aprovar professor', 'error');
+					this.alertService.showAlert('Erro ao realizar ação', 'error');
 
 				}
 
@@ -118,9 +127,24 @@ export class AprovacaoComponent implements OnInit {
 
 	}
 
-	aprovarCurso(aprovar: boolean) {
+	aprovarCurso(aprovar: boolean, curso) {
 
-		// TODO chamar back para aprovar o curso passado
+		this.aprovacaoService.aprovarCurso(aprovar, curso).subscribe(
+			(response) => {
+
+				if(response.status) {
+
+					this.alertService.showAlert('Ação feita com sucesso', 'success');
+					this.findCursosNaoAprovados();
+
+				} else {
+
+					this.alertService.showAlert('Erro ao realizar ação', 'error');
+
+				}
+
+			}
+		);
 
 	}
 

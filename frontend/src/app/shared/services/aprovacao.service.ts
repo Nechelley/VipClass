@@ -27,7 +27,12 @@ export class AprovacaoService {
 
 	findCursosNaoAprovados() {
 
+		const data = {
+			acao: ACAO.GET,
+			naoAprovados: true
+		}
 
+		return this.http.postWithTextResponse(api.CURSO, data);
 
 	}
 
@@ -74,7 +79,7 @@ export class AprovacaoService {
 			cursoId: curso.id
 		}
 
-		return this.http.postWithTextResponse(api.ADMINISTRADOR, curso);
+		return this.http.postWithTextResponse(api.ADMINISTRADOR, data);
 
 	}
 
