@@ -51,14 +51,14 @@ export class LoginComponent implements OnInit {
 			email: this.formulario.get('email').value,
 			senha: this.formulario.get('senha').value,
 			roles: [
-				{ authority: perfis.professor}
+				{ authority: perfis.admin}
 			]
 		}
 
 		this.loginService.login(user).subscribe(
 			(response) => {
 				alert(JSON.stringify(response));
-				
+
 				console.log(response);
 
 				this.authService.auth(user);

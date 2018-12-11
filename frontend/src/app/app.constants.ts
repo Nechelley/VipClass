@@ -37,7 +37,8 @@ export const api = {
 	FIND_USUARIO_AUTHENTICADO: 'URL',
 	LOGIN: 'URL',
 	LOGOUT: 'URL',
-	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php'
+	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php',
+	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php'
 };
 
 export const Erro: any = {
@@ -72,5 +73,7 @@ export const ACAO = {
 	INSERT_UPDATE: 'insert',
 	UPDATE: 'update',
 	GET: 'get',
-	DELETE: 'delete'
+	DELETE: 'delete',
+	APROVAR_PROFESSOR: 'aprovarProfessor',
+	APROVAR_CURSO: 'aprovarCurso'
 }

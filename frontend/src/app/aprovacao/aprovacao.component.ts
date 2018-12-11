@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { routeParams } from '../app.constants';
+import { AprovacaoService } from '../shared/services/aprovacao.service';
 
 @Component({
 	selector: 'app-aprovacao',
@@ -26,7 +27,10 @@ export class AprovacaoComponent implements OnInit {
 	cursosNaoAprovados: any[] = [];
 	textSelecionado: any;
 
-	constructor(private activatedRoute: ActivatedRoute) {
+	constructor(
+		private activatedRoute: ActivatedRoute,
+		private aprovacaoService: AprovacaoService
+	) {
 
 		this.listenToRoute();
 
@@ -88,6 +92,18 @@ export class AprovacaoComponent implements OnInit {
 			},
 		];
 		// TODO chamar back para buscar a lista de professores não aprovados
+
+		this.aprovacaoService.findProfessoresNaoAprovados().subscribe(
+			(response) => {
+
+				if(response.status) {
+
+					this.professoresNaoAprovados = response.valor;
+
+				}
+
+			}
+		);
 
 	}
 
