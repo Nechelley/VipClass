@@ -96,7 +96,18 @@ export class HttpCustomizedService {
 
 			if(typeof response === 'string') {
 
-				return JSON.parse(response);
+				try {
+
+					return JSON.parse(response);
+
+				} catch (error) {
+
+					return {
+						status: false,
+						valor: 'Erro ao realizar operação'
+					};
+
+				}
 
 			}
 

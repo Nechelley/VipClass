@@ -24,14 +24,14 @@ export class PerfilComponent implements OnInit {
 		private alertService: AlertService
 	) {
 
-		// this.usuario = this.usuarioService.getUsuario();
+		this.usuario = this.usuarioService.getUsuario();
 		this.loadForm();
 
 	}
 
 	ngOnInit() {
 
-		this.getUsuarioAdministradorTeste();
+		this.getUsuario();
 	}
 
 	loadForm() {
@@ -60,16 +60,15 @@ export class PerfilComponent implements OnInit {
 
 	}
 
-	getUsuarioAdministradorTeste() {
+	getUsuario() {
 
-		this.cadastroService.findAdministrador().subscribe((response) => this.formulario.patchValue(response.valor[0]));
+		this.cadastroService.findUsuario().subscribe((response) => this.formulario.patchValue(response.valor[0]));
 
 	}
 
 	editarUsuario() {
 
-		// TODO alterar flags pra ver se é usuario
-		this.cadastroService.updateAdministrador(this.formulario.value).subscribe(
+		this.cadastroService.updateUsuario(this.formulario.value).subscribe(
 			(response) => {
 
 				if(response.status) {

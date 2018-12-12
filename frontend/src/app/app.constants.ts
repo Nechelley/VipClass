@@ -9,6 +9,12 @@ export const perfis = {
 	aluno: 'ROLE_ALUNO'
 };
 
+export const nivelAcesso = [
+	perfis.admin,
+	perfis.professor,
+	perfis.aluno
+]
+
 export const routeParams = {
 	tipo: {
 		professor: 'professor',
@@ -40,7 +46,8 @@ export const api = {
 	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php',
 	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php',
 	ALUNO: BASE_API + 'VipClass/backend/api/aluno.php',
-	CURSO: BASE_API + 'VipClass/backend/api/curso.php'
+	CURSO: BASE_API + 'VipClass/backend/api/curso.php',
+	AUTH: BASE_API + 'VipClass/backend/api/autenticacao.php'
 };
 
 export const Erro: any = {
@@ -56,7 +63,7 @@ export const routePieces = {
 		admin: 'cadastro/admin/kkkbl23aindnfejpoiae11nmova23sdjofwflllaa26'
 	},
 	email: 'email',
-	login: 'login',
+	login: 'login/cliente',
 	recursoAula: 'recursoAula',
 	cadastroMaterial: 'cadastroMaterial',
 	cadastroCurso: 'cadastroCurso',
@@ -80,5 +87,11 @@ export const ACAO = {
 	APROVAR_PROFESSOR: 'aprovarProfessor',
 	REPROVAR_PROFESSOR: 'desaprovarProfessor',
 	APROVAR_CURSO: 'aprovarCurso',
-	REPROVAR_CURSO: 'desaprovarCurso'
+	REPROVAR_CURSO: 'desaprovarCurso',
+	LOGIN: 'login',
+	LOGIN_ADMIN: 'loginAdm',
+	USUARIO_ESTA_LOGADO: 'usuarioLogado',
+	USUARIO_PODE_LOGAR: 'usuarioPodeLogar',
+	LOGOUT: 'logout'
+
 }

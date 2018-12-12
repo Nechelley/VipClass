@@ -10,7 +10,7 @@
 
 		private function __construct() { }
 
-		public static function getConexao($server = "127.0.0.1", $bd = "mydb", $user = "root", $password = "") {
+		public static function getConexao($server = "127.0.0.1", $bd = "mydb", $user = "root", $password = "toyotaeenaruguto") {
 			if (!isset(self::$instance)) {
 				self::$server = $server;
 				self::$bd = $bd;

@@ -44,10 +44,42 @@ export class CadastroService {
 
 	}
 
+	findAluno(): Observable<any> {
+
+		const user = this.usuarioService.getUsuario();
+		user.acao = ACAO.GET;
+
+		return this.http.postWithTextResponse(api.ALUNO, user);
+
+	}
+
+	findProfessor(): Observable<any> {
+
+		const user = this.usuarioService.getUsuario();
+		user.acao = ACAO.GET;
+
+		return this.http.postWithTextResponse(api.PROFESSOR, user);
+
+	}
+
 	updateAdministrador(admin: any): Observable<any> {
 
 		admin.acao = ACAO.INSERT_UPDATE;
 		return this.http.postWithTextResponse(api.ADMINISTRADOR, admin);
+
+	}
+
+	updateAluno(admin: any): Observable<any> {
+
+		admin.acao = ACAO.INSERT_UPDATE;
+		return this.http.postWithTextResponse(api.ALUNO, admin);
+
+	}
+
+	updateProfessor(admin: any): Observable<any> {
+
+		admin.acao = ACAO.INSERT_UPDATE;
+		return this.http.postWithTextResponse(api.PROFESSOR, admin);
 
 	}
 
@@ -57,6 +89,46 @@ export class CadastroService {
 		curso.professorId = this.usuarioService.getUsuario().id;
 
 		return this.http.postWithTextResponse(api.CURSO, curso);
+
+	}
+
+	findUsuario(): Observable<any> {
+
+		const user = this.usuarioService.getUsuario();
+
+		if(user.nivel_acesso == 0) {
+
+			return this.findAdministrador();
+
+		} else if(user.nivel_acesso == 1) {
+
+			return this.findProfessor();
+
+		} else if(user.nivel_acesso == 2) {
+
+			return this.findAluno();
+
+		}
+
+	}
+
+	updateUsuario(usuario: any):Observable<any> {
+
+		const user = this.usuarioService.getUsuario();
+
+		if(user.nivel_acesso == 0) {
+
+			return this.updateAdministrador(usuario);
+
+		} else if(user.nivel_acesso == 1) {
+
+			return this.updateProfessor(usuario);
+
+		} else if(user.nivel_acesso == 2) {
+
+			return this.updateAluno(usuario);
+
+		}
 
 	}
 }
