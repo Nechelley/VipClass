@@ -3,7 +3,7 @@
 	class Util{
 		//limpa a string passada para evitar ataques no banco
 		public static function limpaString($string) {
-			return $string;
+			return preg_replace("/[^a-zA-Z0-9\s]/", "", $string);
 		}
  
 		//retorna oque veio como entrada na requisicao
