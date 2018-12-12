@@ -37,7 +37,7 @@
 		public static function insert($bean){//<FAZER> verificar quais campos realmente precisam ser inseridos e quais sao padroes
 			$query = "
 				INSERT INTO Curso(nome, valor, descricao, aprovado_pelo_administrador, fl_ativo, Professor_Usuario_id)
-				VALUES(:nome, :valor, :descricao, FALSE, TRUE, :professorId);
+				VALUES(:nome, :valor, :descricao, NULL, TRUE, :professorId);
 			";
 
 			//parametros de bind
@@ -94,7 +94,7 @@
 				SELECT
 					*
 				FROM Curso
-				WHERE aprovado_pelo_administrador = 0;
+				WHERE aprovado_pelo_administrador IS NULL;
 			";
 
 			return ProcessaQuery::consultarQuery($query);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../shared/services/usuario.service';
-import { CadastroService } from '../cadastro/cadastro.service';
+import { CadastroService } from '../shared/services/cadastro.service';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AlertService } from '../shared/services/alert.service';
 import { sexo } from '../app.constants';

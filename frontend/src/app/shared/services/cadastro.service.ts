@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpCustomizedService } from '../shared/services/http-customized.service';
-import { api, ACAO } from '../app.constants';
+import { HttpCustomizedService } from './http-customized.service';
+import { api, ACAO } from '../../app.constants';
 import { Observable } from 'rxjs';
-import { UsuarioService } from '../shared/services/usuario.service';
+import { UsuarioService } from './usuario.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -48,6 +48,15 @@ export class CadastroService {
 
 		admin.acao = ACAO.INSERT_UPDATE;
 		return this.http.postWithTextResponse(api.ADMINISTRADOR, admin);
+
+	}
+
+	cadastrarCurso(curso): Observable<any> {
+
+		curso.acao = ACAO.INSERT_UPDATE;
+		curso.professorId = this.usuarioService.getUsuario().id;
+
+		return this.http.postWithTextResponse(api.CURSO, curso);
 
 	}
 }

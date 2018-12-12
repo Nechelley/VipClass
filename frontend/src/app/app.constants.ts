@@ -39,7 +39,8 @@ export const api = {
 	LOGOUT: 'URL',
 	ADMINISTRADOR: BASE_API + 'VipClass/backend/api/administrador.php',
 	PROFESSOR: BASE_API + 'VipClass/backend/api/professor.php',
-	ALUNO: BASE_API + 'VipClass/backend/api/aluno.php'
+	ALUNO: BASE_API + 'VipClass/backend/api/aluno.php',
+	CURSO: BASE_API + 'VipClass/backend/api/curso.php'
 };
 
 export const Erro: any = {

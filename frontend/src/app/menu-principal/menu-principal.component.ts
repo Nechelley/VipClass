@@ -5,7 +5,7 @@ import { NavegacaoService } from '../shared/services/navegacao.service';
 import { LoginService } from '../shared/security/services/login.service';
 import { AuthService } from '../shared/security/services/auth.service';
 import { AlertService } from '../shared/services/alert.service';
-import { CadastroService } from '../cadastro/cadastro.service';
+import { CadastroService } from '../shared/services/cadastro.service';
 
 @Component({
 	selector: 'app-menu-principal',
