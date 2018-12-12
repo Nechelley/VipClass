@@ -21,8 +21,8 @@ if (!isset($entradas->acao)) {
 try {
 	switch ($entradas->acao) {
 		case 'login':
-			$email = $entradas->email;
-			$senha = $entradas->senha;
+			$email = isset($entrada->email) ? Util::limpaString($entrada->email) : null;
+			$senha = isset($entrada->senha) ? Util::limpaString($entrada->senha) : null;
 
 			//Valida os dados da requisição
 			$validador = new Validador();
@@ -34,7 +34,7 @@ try {
 				->temMinimo(1, true, $GLOBALS["msgErroEmailInvalido"])
 				->temMaximo(45, true, $GLOBALS["msgErroEmailInvalido"])
 				->ehEmail($GLOBALS["msgErroEmailInvalido"]);
-			
+
 			$validador->getDado("senha")
 				->ehVazio($GLOBALS['msgErroSenhaInvalido'])
 				->temMinimo(1, true, $GLOBALS["msgErroSenhaInvalido"])
@@ -51,7 +51,7 @@ try {
 			$loginBean = new LoginBean($email, $senha);
 
 			$retorno = AutenticacaoDao::verificarLogin($loginBean);
-			
+
 			break;
 		case 'logout':
 			Sessao::iniciar();
@@ -64,7 +64,7 @@ try {
 			$retorno->setStatus(true);
 			break;
 		case 'usuarioLogado':
-			$idUsuario = $entradas->idUsuario;
+			$idUsuario = isset($entrada->idUsuario) ? Util::limpaString($entrada->idUsuario) : null;
 
 			$validador = new Validador();
 			$validador->setDado("idUsuario", $idUsuario);
@@ -79,13 +79,13 @@ try {
 			$retorno = AutenticacaoDao::verificarUsuarioLogado($idUsuario);
 			break;
 		case 'usuarioPodeLogar':
-			$idUsuario = $entradas->idUsuario;
+			$idUsuario = isset($entrada->idUsuario) ? Util::limpaString($entrada->idUsuario) : null;
 
 			$validador = new Validador();
 			$validador->setDado("idUsuario", $idUsuario);
 
 			$validador->getDado("idUsuario")->ehVazio($GLOBALS['msgErroIdInvalido']);
-			
+
 			//Se houver erros na validação, é enviado uma mensagem de erro
 			if ($validador->getQntErros() !== 0) {
 				throw new RuntimeException($validador->getTodosErrosMensagens());
@@ -94,8 +94,8 @@ try {
 			$retorno = AutenticacaoDao::verificarLoginDisponivel($idUsuario);
 			break;
 		case 'loginAdm':
-			$email = $entradas->email;
-			$senha = $entradas->senha;
+			$email = isset($entrada->email) ? Util::limpaString($entrada->email) : null;
+			$senha = isset($entrada->senha) ? Util::limpaString($entrada->senha) : null;
 
 			//Valida os dados da requisição
 			$validador = new Validador();
@@ -107,7 +107,7 @@ try {
 				->temMinimo(1, true, $GLOBALS["msgErroEmailInvalido"])
 				->temMaximo(45, true, $GLOBALS["msgErroEmailInvalido"])
 				->ehEmail($GLOBALS["msgErroEmailInvalido"]);
-			
+
 			$validador->getDado("senha")
 				->ehVazio($GLOBALS['msgErroSenhaInvalido'])
 				->temMinimo(1, true, $GLOBALS["msgErroSenhaInvalido"])
@@ -124,7 +124,7 @@ try {
 			$loginBean = new LoginBean($email, $senha);
 
 			$retorno = AutenticacaoDao::verificarLoginAdministrador($loginBean);
-			
+
 			break;
 		default :
 			$retorno->setValor($GLOBALS['msgSemAcao']);
