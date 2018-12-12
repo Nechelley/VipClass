@@ -426,7 +426,7 @@ class AutenticacaoDao
 		$isLogado = $status ? 1 : 0;
 
 		return ProcessaQuery::executarQuery($query, [
-			new BindParam(":logado", $isLogado, PDO::PARAM_INT),
+			new BindParam(":logado", intval($isLogado), PDO::PARAM_INT),
 			new BindParam(":idUsuario", $idUsuario, PDO::PARAM_INT)
 		]);
 	}
