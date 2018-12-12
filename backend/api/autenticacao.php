@@ -3,6 +3,7 @@ include_once("../utils/Msgs.php");
 include_once("../utils/Retorno.class.php");
 include_once("../utils/Util.class.php");
 include_once("../utils/NivelAcesso.class.php");
+include_once("../utils/Sessao.class.php");
 include_once("../utils/validador/Validador.class.php");
 include_once("../model/bean/LoginBean.class.php");
 include_once("../model/dao/AutenticacaoDao.class.php");
@@ -45,7 +46,7 @@ try {
 			}
 
 			//Cria o hash da senha
-			$senha = password_hash($senha, PASSWORD_DEFAULT);
+			// $senha = password_hash($senha, PASSWORD_DEFAULT);
 
 			$loginBean = new LoginBean($email, $senha);
 
@@ -55,9 +56,34 @@ try {
 		case 'logout':
 			break;
 		case 'usuarioLogado':
-			
+			$idUsuario = $entradas->idUsuario;
+
+			$validador = new Validador();
+			$validador->setDado("idUsuario", $idUsuario);
+
+			$validador->getDado("idUsuario")->ehVazio($GLOBALS['msgErroIdInvalido']);
+
+			//Se houver erros na validação, é enviado uma mensagem de erro
+			if ($validador->getQntErros() !== 0) {
+				throw new RuntimeException($validador->getTodosErrosMensagens());
+			}
+
+			$retorno = AutenticacaoDao::verificarUsuarioLogado($idUsuario);
 			break;
 		case 'usuarioPodeLogar':
+			$idUsuario = $entradas->idUsuario;
+
+			$validador = new Validador();
+			$validador->setDado("idUsuario", $idUsuario);
+
+			$validador->getDado("idUsuario")->ehVazio($GLOBALS['msgErroIdInvalido']);
+			
+			//Se houver erros na validação, é enviado uma mensagem de erro
+			if ($validador->getQntErros() !== 0) {
+				throw new RuntimeException($validador->getTodosErrosMensagens());
+			}
+
+			$retorno = AutenticacaoDao::verificarLoginDisponivel($idUsuario);
 			break;
 		default :
 			$retorno->setValor($GLOBALS['msgSemAcao']);
