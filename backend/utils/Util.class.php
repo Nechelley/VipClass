@@ -27,6 +27,9 @@
 				return false;
 			}
 
+			//Coloca o servidor no horário de Brasília
+			date_default_timezone_set("America/Sao_Paulo");
+
 			$dataAtual = (new DateTime())->getTimestamp();
 			$data = (new DateTime($data))->getTimestamp();
 

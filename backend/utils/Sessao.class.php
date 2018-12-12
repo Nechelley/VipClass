@@ -7,7 +7,9 @@ class Sessao
 {
 	public static function iniciar()
 	{
-		session_start();
+		if (session_status() !== PHP_SESSION_ACTIVE) {
+			session_start();
+		}
 	}
 
 	public static function gerarNovoId()
@@ -30,8 +32,20 @@ class Sessao
 		$_SESSION['usuario'] = $usuario;
 	}
 
-	public static function retornarUsuario()
+	public static function obterUsuario()
 	{
-		return ($_SESSION['usuario']) ? $_SESSION['usuario'] : "";
+		return ($_SESSION['usuario']) ? $_SESSION['usuario'] : false;
+	}
+
+	public static function isAtiva()
+	{
+		if (
+			session_status() === PHP_SESSION_ACTIVE &&
+			self::obterUsuario()
+		) {
+			return true;
+		}
+
+		return false;
 	}
 }

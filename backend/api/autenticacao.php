@@ -46,7 +46,7 @@ try {
 			}
 
 			//Cria o hash da senha
-			// $senha = password_hash($senha, PASSWORD_DEFAULT);
+			$senha = sha1($senha);
 
 			$loginBean = new LoginBean($email, $senha);
 
@@ -54,6 +54,14 @@ try {
 			
 			break;
 		case 'logout':
+			Sessao::iniciar();
+			$usuario = Sessao::obterUsuario();
+			if ($usuario) {
+				AutenticacaoDao::deslogarUsuario($usuario['id']);
+			}
+			Sessao::destruir();
+
+			$retorno->setStatus(true);
 			break;
 		case 'usuarioLogado':
 			$idUsuario = $entradas->idUsuario;
@@ -84,6 +92,39 @@ try {
 			}
 
 			$retorno = AutenticacaoDao::verificarLoginDisponivel($idUsuario);
+			break;
+		case 'loginAdm':
+			$email = $entradas->email;
+			$senha = $entradas->senha;
+
+			//Valida os dados da requisição
+			$validador = new Validador();
+			$validador->setDado("email", $email);
+			$validador->setDado("senha", $senha);
+
+			$validador->getDado("email")
+				->ehVazio($GLOBALS["msgErroEmailInvalido"])
+				->temMinimo(1, true, $GLOBALS["msgErroEmailInvalido"])
+				->temMaximo(45, true, $GLOBALS["msgErroEmailInvalido"])
+				->ehEmail($GLOBALS["msgErroEmailInvalido"]);
+			
+			$validador->getDado("senha")
+				->ehVazio($GLOBALS['msgErroSenhaInvalido'])
+				->temMinimo(1, true, $GLOBALS["msgErroSenhaInvalido"])
+				->temMaximo(45, true, $GLOBALS["msgErroSenhaInvalido"]);
+
+			//Se houve algum erro na validação, é lançado uma exceção
+			if ($validador->getQntErros() !== 0) {
+				throw new RuntimeException($validador->getTodosErrosMensagens());
+			}
+
+			//Cria o hash da senha
+			$senha = sha1($senha);
+
+			$loginBean = new LoginBean($email, $senha);
+
+			$retorno = AutenticacaoDao::verificarLoginAdministrador($loginBean);
+			
 			break;
 		default :
 			$retorno->setValor($GLOBALS['msgSemAcao']);

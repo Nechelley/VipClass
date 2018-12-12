@@ -82,7 +82,7 @@
 			$validador->getDado("senha")->temMaximo(45, true, $GLOBALS["msgErroSenhaInvalido"]);
 
 			if($validador->getQntErros() == 0){//deu certo
-				$bean->setSenha(sha1($bean->getSenha()));//ja salva o hash
+				$bean->setSenha(sha1($bean->getSenha()));//ja salva o hash 
 
 				//verifica se insere ou atualiza
 				if(isset($entrada->id)){//atualiza

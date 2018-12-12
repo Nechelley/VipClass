@@ -26,11 +26,10 @@ class AutenticacaoDao
 			!empty($resultadoConsulta)
 		) {
 			$usuario = reset($resultadoConsulta); //Pega o primeiro usuário
-			$senha = $loginBean->getSenha();
 
 			//Verifica se o administrador aprovou o cadastro do professor
 			if(
-				$usuario->nivel_acesso === NivelAcesso::PROFESSOR && 
+				$usuario->nivel_acesso == NivelAcesso::PROFESSOR && 
 				!Util::isDataValida($usuario->data_aprovacao_administrador)
 			){
 				//Se não aprovou, envia mensagem de erro
@@ -40,8 +39,8 @@ class AutenticacaoDao
 			$isSessaoAtiva = !Util::isDataValida($usuario->data_validade_sessao);
 
 			//Se o usuário já está logado, o login está indisponível
-			if ($usuario->esta_logado === 1 && $isSessaoAtiva){
-				return $retorno;
+			if ($usuario->esta_logado == 1 && $isSessaoAtiva){
+				throw new RuntimeException($GLOBALS['msgErroUsuarioLogado']);
 			}
 
 			//Se as tentativas de login consecutiva atingiu o limite e ainda não 
@@ -53,12 +52,8 @@ class AutenticacaoDao
 				throw new RuntimeException($GLOBALS['msgErroTentativasLogin']);
 			}
 
-			// var_dump($senha);
-			// var_dump($usuario->senha);
-			// die();
-
 			//Verifica se a senha está correta
-			if (password_verify($senha, $usuario->senha)) {
+			if ($loginBean->getSenha() == $usuario->senha) {
 				//Dados que serão enviados para o cliente
 				$dadosUsuario = [
 					"id" => $usuario->id,
@@ -67,14 +62,14 @@ class AutenticacaoDao
 				];
 							
 				//Atualiza o "status logado" para logado
-				// if (!self::atualizarStatusLogado($usuario->id, true)->getStatus()){
-				// 	throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
-				// }
+				if (!self::atualizarStatusLogado($usuario->id, true)->getStatus()){
+					throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+				}
 
 				//Reinicia o contador de tentantivas de login
-				// if (!self::resetarTentativaLogin($usuario->id)->getStatus()) {
-				// 	throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
-				// }
+				if (!self::resetarTentativaLogin($usuario->id)->getStatus()) {
+					throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+				}
 
 				//Armazena o usuário na sessão
 				Sessao::iniciar();
@@ -87,9 +82,6 @@ class AutenticacaoDao
 					"nivelAcesso" => $usuario->nivel_acesso,
 					"email" => $usuario->email
 				]);
-
-				var_dump($_SESSION);
-				die();
 
 				//Atualiza a validade da sessão
 				if (!self::atualizarValidadeSessao($usuario->id)->getStatus()) {
@@ -114,6 +106,98 @@ class AutenticacaoDao
 		throw new Exception($GLOBALS['msgErroLogin']);
 	}
 
+	public static function verificarLoginAdministrador(LoginBean $loginBean)
+	{
+		//Busca algum usuário cadastrado com o email que está tentando logar
+		$retornoBusca = self::getAdministradorPorEmail($loginBean);
+
+		if (!$retornoBusca->getStatus()){
+			throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+		}
+
+		$resultadoConsulta = $retornoBusca->getValor();
+		//Objeto que será enviado como resposta para o cliente
+		$retornoResposta = new Retorno(); 
+
+		//Verifica se há um usuário cadastrado
+		if(
+			isset($resultadoConsulta) && 
+			is_array($resultadoConsulta) && 
+			!empty($resultadoConsulta)
+		) {
+			$usuario = reset($resultadoConsulta); //Pega o primeiro usuário
+
+			$isSessaoAtiva = !Util::isDataValida($usuario->data_validade_sessao);
+
+			//Se o usuário já está logado, o login está indisponível
+			if ($usuario->esta_logado == 1 && $isSessaoAtiva){
+				throw new RuntimeException($GLOBALS['msgErroUsuarioLogado']);
+			}
+
+			//Se as tentativas de login consecutiva atingiu o limite e ainda não 
+			// passou o tempo mínimo de espera, é enviado uma mensagem de erro ao cliente
+			if (
+				$usuario->qtd_tentativa_login % self::$limiteTentativasLogin == 0 &&
+				!Util::isDataValida($usuario->data_permissao_login)
+			) {
+				throw new RuntimeException($GLOBALS['msgErroTentativasLogin']);
+			}
+
+			//Verifica se a senha está correta
+			if ($loginBean->getSenha() == $usuario->senha) {
+				//Dados que serão enviados para o cliente
+				$dadosUsuario = [
+					"id" => $usuario->id,
+					"nome" => $usuario->nome,
+					"nivel_acesso" => $usuario->nivel_acesso
+				];
+							
+				//Atualiza o "status logado" para logado
+				if (!self::atualizarStatusLogado($usuario->id, true)->getStatus()){
+					throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+				}
+
+				//Reinicia o contador de tentantivas de login
+				if (!self::resetarTentativaLogin($usuario->id)->getStatus()) {
+					throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+				}
+
+				//Armazena o usuário na sessão
+				Sessao::iniciar();
+				Sessao::gerarNovoId();
+				Sessao::gravarUsuario([
+					"id" => $usuario->id,
+					"nome" => $usuario->nome,
+					"cpf" => $usuario->cpf,
+					"sexo" => $usuario->sexo,
+					"nivelAcesso" => $usuario->nivel_acesso,
+					"email" => $usuario->email
+				]);
+
+				//Atualiza a validade da sessão
+				if (!self::atualizarValidadeSessao($usuario->id)->getStatus()) {
+					throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+				}
+
+				//Login realizado com sucesso, responde com os dados do usuário
+				$retornoResposta->setStatus(true);
+				$retornoResposta->setValor($dadosUsuario);
+
+				return $retornoResposta;
+			} 
+
+			//Senha inválida, incrementar tentantiva no banco
+			$retorno = self::incrementarTentativaLogin($usuario->id, $usuario->qtd_tentativa_login);
+			if (!$retorno->getStatus()) {
+				throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+			}
+		}
+
+		//Email e/ou senha inválida, enviar mensagem coerente com o erro.
+		throw new Exception($GLOBALS['msgErroLogin']);
+	}
+
+
 	public static function verificarUsuarioLogado($idUsuario)
 	{
 		$retornoBusca = self::getUsuarioPorId($idUsuario);
@@ -136,12 +220,12 @@ class AutenticacaoDao
 		$isSessaoAtiva = !Util::isDataValida($usuario->data_validade_sessao);
 
 		//Verifica se está logado e a sessão não expirou
-		if ($usuario->esta_logado === 1 && $isSessaoAtiva){
+		if ($usuario->esta_logado == 1 && $isSessaoAtiva){
 			$retorno->setValor(["esta_logado" => true]);
 			return $retorno;
 		}
 
-		$retorno->setValor(["esta_logado" => 0]);
+		$retorno->setValor(["esta_logado" => false]);
 		return $retorno;
 	}
 
@@ -166,7 +250,7 @@ class AutenticacaoDao
 
 		//Verifica se o administrador aprovou o cadastro do professor
 		if(
-			$usuario->nivel_acesso === NivelAcesso::PROFESSOR && 
+			$usuario->nivel_acesso == NivelAcesso::PROFESSOR && 
 			!Util::isDataValida($usuario->data_aprovacao_administrador)
 		){
 			//Se não aprovou, envia mensagem de login indisponivel
@@ -176,7 +260,7 @@ class AutenticacaoDao
 		$isSessaoAtiva = !Util::isDataValida($usuario->data_validade_sessao);
 
 		//Se o usuário já está logado, o login está indisponível
-		if ($usuario->esta_logado === 1 && $isSessaoAtiva){
+		if ($usuario->esta_logado == 1 && $isSessaoAtiva){
 			return $retorno;
 		}
 
@@ -193,6 +277,18 @@ class AutenticacaoDao
 		return $retorno;
 	}
 
+	public static function deslogarUsuario($idUsuario)
+	{
+		//Altera a data de validade da sessão para uma data passada
+		if (!self::invalidarSessao($idUsuario)->getStatus()){
+			throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+		}
+
+		//Altera o "status logado" para "deslogado"
+		if (!self::atualizarStatusLogado($idUsuario, false)->getStatus()) {
+			throw new RuntimeException($GLOBALS['msgErroInternoServidor']);
+		}
+	}
 
 	/**
 	 * Busca por um usuário cadastrado que tenha o email que está tentando logar
@@ -233,22 +329,54 @@ class AutenticacaoDao
 		]);
 	}
 
+	public static function getAdministradorPorEmail(LoginBean $loginBean)
+	{
+		$query = "
+			SELECT
+				U.id,
+				U.cpf,
+				U.nome,
+				U.sexo,
+				U.nivel_acesso,
+				U.email,
+				U.senha,
+				U.qtd_tentativa_login,
+				U.esta_logado,
+				U.data_permissao_login,
+				U.data_validade_sessao
+			FROM 
+				Usuario AS U
+			WHERE 
+				U.email = :email AND
+				U.fl_ativo = 1 AND
+				U.nivel_acesso = :administrador 
+		";
+
+		return ProcessaQuery::consultarQuery($query, [
+			new BindParam(":email", $loginBean->getEmail(), PDO::PARAM_STR),
+			new BindParam(":administrador", 0, PDO::PARAM_INT)
+		]);
+	}
+
 	public static function getUsuarioPorId($idUsuario)
 	{
 		$query = "
 			SELECT
-				id,
-				cpf,
-				nome,
-				sexo,
-				nivel_acesso,
-				email,
-				qtd_tentativa_login,
-				esta_logado,
-				data_permissao_login,
-				data_validade_sessao
+				U.id,
+				U.cpf,
+				U.nome,
+				U.sexo,
+				U.nivel_acesso,
+				U.email,
+				U.qtd_tentativa_login,
+				U.esta_logado,
+				U.data_permissao_login,
+				U.data_validade_sessao,
+				P.data_aprovacao_administrador
 			FROM 
-				Usuario
+				Usuario AS U
+				LEFT JOIN Professor AS P
+					ON P.Usuario_id = U.id
 			WHERE
 				fl_ativo = 1
 				AND id = :idUsuario

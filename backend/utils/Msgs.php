@@ -22,7 +22,7 @@
 
 	$msgErroLogin = "Email e/ou senha inválidos!";
 	$msgErroUsuarioLogado = "O usuário está logado em outra sessão!";
-	$msgErroTentativasLogin = "As tentativas de login atigiram o limite, por favor, tente mais tarde.";
+	$msgErroTentativasLogin = "As tentativas de login atigiram o limite! Por favor, tente mais tarde.";
 	$msgErroUsuarioInexistente = "Usuário inexistente.";
 	/*$msgErroImgTipo = "Imagem não possui uma extensão válida!";
 	$msgErroImgTamanho = "Imagem muito grande!";*/
